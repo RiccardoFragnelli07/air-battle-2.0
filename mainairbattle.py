@@ -13,39 +13,35 @@ def carica_texture(immagini = []):
     immagini.append([])
     immagini.append([])
 
-    immagini[0].append(pygame.image.load("SF01.png"))
-    immagini[0].append(pygame.image.load("SF02.png"))
-    immagini[0].append(pygame.image.load("SF03.png"))
-    immagini[0].append(pygame.image.load("SF04.png"))
+    immagini[0].append(pygame.image.load("air-battle-2.0\\immagini\\SF01.png"))
+    immagini[0].append(pygame.image.load("air-battle-2.0\\immagini\\SF02.png"))
+    immagini[0].append(pygame.image.load("air-battle-2.0\\immagini\\SF03.png"))
+    immagini[0].append(pygame.image.load("air-battle-2.0\\immagini\\SF04.png"))
     
-    immagini[1].append(pygame.image.load("SF01a_strip60.png"))
-    immagini[1].append(pygame.image.load("SF02a_strip60.png"))
-    immagini[1].append(pygame.image.load("SF03a_strip60.png"))
-    immagini[1].append(pygame.image.load("SF04a_strip60.png"))
+    immagini[1].append(pygame.image.load("air-battle-2.0\\immagini\\SF01a_strip60.png"))
+    immagini[1].append(pygame.image.load("air-battle-2.0\\immagini\\SF02a_strip60.png"))
+    immagini[1].append(pygame.image.load("air-battle-2.0\\immagini\\SF03a_strip60.png"))
+    immagini[1].append(pygame.image.load("air-battle-2.0\\immagini\\SF04a_strip60.png"))
 
-#def Draw(aereo):
-#    screen.fill(WHITE)
-#    screen.blit(img_aereo, (aereoPri.x, aereoPri.y))
-#    pygame.display.update()
 
-# aereo_x, aereo_y, dim_aereo_x, dim_aereo_y  = 150, 545, 100, 100
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y  = 150, 545, 14400, 240
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 800, 100
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
 effetti_rect = pygame.Rect(proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-sfondo = pygame.image.load("background.jpg")
+
+sfondo = pygame.image.load("air-battle-2.0\\immagini\\background.jpg")
 sfondo = pygame.transform.rotate(sfondo, 90)
 sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 
 pygame.display.set_caption("AIR BATTLE")
 # img_aereo = pygame.image.load("C:\\Users\\Matteo\\Desktop\\Pygame\\Videogioco\\Textures\\Navicelle\\Designs - Base\\PNGs\\Nairan - Torpedo Ship - Base.png")
-img_effetti = pygame.image.load("airbattle\\Textures\\Navicelle\\Engine Effects\\PNGs\\Nairan - Torpedo Ship - Engine.png")
+img_effetti = pygame.image.load("air-battle-2.0\\immagini\\Nairan - Torpedo Ship - Engine.png")
 jet_texture = []
 carica_texture(jet_texture)
 
-img_aereo = pygame.transform.scale(jet_texture[1][3], (dim_aereo_x, dim_aereo_y))
+img_aereo = pygame.transform.scale(jet_texture[1][1], (dim_aereo_x, dim_aereo_y))
 img_effetti = pygame.transform.scale(img_effetti, (dim_proiettile_x, dim_proiettile_y))
 aereoPri = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
 effettiPri = pygame.Rect(proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y)
@@ -85,6 +81,7 @@ while run:
         conta = 0
     else:
         conta += 1
+        
     pygame.display.update()
     
 
