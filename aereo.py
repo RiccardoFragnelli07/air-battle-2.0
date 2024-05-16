@@ -2,9 +2,9 @@ import pygame
 import math
 import funzioni
 
-VEL = 5
-ROTAZIONE = 0.5
-MAX_ROTAZIONE = 9
+VEL = 6
+ROTAZIONE = 0.7
+MAX_ROTAZIONE = 11
 DEROTAZIONE = 1.2
 HEIGHT = 690
 WIDTH = 500
