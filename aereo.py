@@ -2,7 +2,7 @@ import pygame
 import math
 import funzioni
 
-VEL = 7
+VEL = 5
 ROTAZIONE = 0.5
 MAX_ROTAZIONE = 9
 DEROTAZIONE = 1.2
