@@ -35,12 +35,13 @@ class Proiettile:
 
 def move_proiettili(lista, key):
     if key[pygame.K_SPACE]:
+        tmp = []
         for i in range(len(lista)):
             lista[i].rect.y -= VEL
-        # for i in range(len(lista)):
-        #     if lista[i].rect.y < 0:
-        #         lista.remove(lista[i])
-        #         i += 1
+        for i in range(len(lista)):
+            if lista[i].rect.y >= 0:
+                tmp.append(lista[i])
+        lista = tmp
                 
 def draw_proiettili(lista, screen):
     for i in range(len(lista)):
