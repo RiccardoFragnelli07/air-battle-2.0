@@ -4,6 +4,7 @@ from random import randint
 WIDTH, HEIGHT = 500, 700
 VEL = 7
 
+
 class Nemico:
     def __init__(self, jetNemico_rect, img_jetNemico) -> None:
         self.rect = jetNemico_rect
