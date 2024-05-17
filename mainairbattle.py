@@ -26,10 +26,11 @@ def carica_texture(immagini = []):
 
 
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y  = 150, 545, 14400, 240
-proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 200, 200
+proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 20, 20
 dim_fuoco_x, dim_fuoco_y = 800, 100
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
-proiettile_rect = pygame.Rect(proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y)
+aereo_rect_2 = pygame.Rect(aereo_x, aereo_y, 50, 50)
+#proiettile_rect = pygame.Rect(proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("AIR BATTLE")
@@ -45,7 +46,7 @@ sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 img_aereo = pygame.transform.scale(jet_texture[1][1], (dim_aereo_x, dim_aereo_y))
 img_proiettile = pygame.transform.scale(img_proiettile, (dim_proiettile_x, dim_proiettile_y))
 img_effetti = pygame.transform.scale(img_effetti, (dim_fuoco_x, dim_fuoco_y))
-aereo = Aereo(aereo_rect, img_aereo, img_effetti, screen)
+aereo = Aereo(aereo_rect, img_aereo, img_effetti, aereo_rect_2, screen)
 #proiettile = Proiettile(proiettile_rect, img_proiettile, screen)
 
 lista_proiettili = []
@@ -76,11 +77,20 @@ while run:
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
     
     if key_pressed[pygame.K_SPACE]:
-        proiettile_rect = pygame.Rect(aereo.rect.x + (aereo.rect.width // 2), aereo.rect.y + dim_proiettile_y, dim_proiettile_x, dim_proiettile_y)
+        proiettile_rect = pygame.Rect(aereo.rect.x + (aereo_rect_2.width // 2),aereo_rect_2.y + dim_proiettile_y, dim_proiettile_x, dim_proiettile_y)
         # su errore in aereo.rect.width
-        print(aereo.rect.x, proiettile_rect.x)
+        #print(aereo.rect.x, proiettile_rect.x)
         p = Proiettile(proiettile_rect, img_proiettile, screen)
+        #bullet = Proiettile(proiettile_rect, img_proiettile, screen)
+        #lista_proiettili.append([bullet, 0])
         lista_proiettili.append(p) 
+    
+    #for proiettile in lista_proiettili:
+    #    proiettile[0].move(aereo_rect_2)
+    #    if proiettile[1] < 5:
+    #        proiettile[1] += 1
+    #for proiettile in lista_proiettili:
+    #    proiettile[0].draw(screen, proiettile[1])
     
     aereo.move(screen, key_pressed, lasciato_ad, mouse_pos)
     move_proiettili(lista_proiettili, key_pressed)
