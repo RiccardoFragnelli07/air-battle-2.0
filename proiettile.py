@@ -9,41 +9,31 @@ class Proiettile:
         self.rect = rect
         self.img = img
         self.screen = screen
-        #self.proiettile = []
+        self.proiettili = []
         self.check = False
         
         proiettile_width = self.img.get_width() // 5
         proiettile_height = self.img.get_height()
-        
-        self.img = self.img.subsurface((0, 0, proiettile_width, proiettile_height))
-        
-        #for i in range(5):
-        #    startx = i * proiettile_width
-        #    img_part = self.img.subsurface((startx, 0, proiettile_width, proiettile_height))
-        #    img_part = pygame.transform.scale(img_part, (50, 50))
-        #    self.proiettile.append(img_part)
+        for i in range(5):
+           startx = i * proiettile_width
+           img_part = self.img.subsurface((startx, 0, proiettile_width, proiettile_height))
+           img_part = pygame.transform.scale(img_part, (30, 30))
+           self.proiettili.append(img_part)
         
 
-    def move(self, aereo):
-        self.rect.y = aereo.y - VEL
-        if self.check == False:
-            self.rect.x = aereo.x + aereo.width//2
-            self.check = True
-
-    def draw(self, screen, ind):
-        screen.blit(self.proiettile[0], (self.rect.x, self.rect.y))
+def move_proiettili(lista):
+    for i in range(len(lista)):
+        lista[i][0].rect.y -= VEL
+        if lista[i][1] > 4:
+            lista[i][1] = 0
+        lista[i][1] += 0.2
         
-
-def move_proiettili(lista, key):
-    if key[pygame.K_SPACE]:
-        tmp = []
-        for i in range(len(lista)):
-            lista[i].rect.y -= VEL
-        for i in range(len(lista)):
-            if lista[i].rect.y >= 0:
-                tmp.append(lista[i])
-        lista = tmp
+    tmp = []
+    for i in range(len(lista)):
+        if lista[i][0].rect.y >= 0:
+            tmp.append(lista[i])
+    return tmp
                 
 def draw_proiettili(lista, screen):
     for i in range(len(lista)):
-        screen.blit(lista[i].img, (lista[i].rect.width, lista[i].rect.height))
+        screen.blit(lista[i][0].proiettili[int(lista[i][1])], (lista[i][0].rect.x, lista[i][0].rect.y))

@@ -2,7 +2,7 @@ import pygame
 import math
 import funzioni
 
-VEL = 6
+VEL = 4
 ROTAZIONE = 0.7
 MAX_ROTAZIONE = 11
 DEROTAZIONE = 1.2
@@ -78,6 +78,6 @@ class Aereo:
 
         
     def draw(self, screen):
-        screen.blit(self.jet[int(self.ind)], (self.rect.x, self.rect.y))
-        screen.blit(self.effetti[int(self.time) % 8], (self.rect.x, self.rect.y + 2))
+        screen.blit(self.jet[int(self.ind)], (self.rect2.x, self.rect2.y))
+        screen.blit(self.effetti[int(self.time) % 8], (self.rect2.x, self.rect2.y + 2))
         self.time += 0.2
