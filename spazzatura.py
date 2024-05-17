@@ -9,5 +9,5 @@
 # lista = f(lista)
 # print(lista)
 
-a = 3.0
-print(a == int(a))
+import math
+print(math.tanh())

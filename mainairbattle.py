@@ -79,7 +79,6 @@ while gameover == False:
         n = Nemico(tempo, nemici_texture)
         lista_nemici.append(n)
 
-    print(len(lista_nemici))
     lista_nemici = move_nemico(lista_nemici)
     aereo.move(screen, key_pressed, lasciato_ad, mouse_pos)
     lista_proiettili = move_proiettili(lista_proiettili)
