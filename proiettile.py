@@ -9,6 +9,7 @@ class Proiettile:
         self.rect = rect
         self.img = img
         self.screen = screen
+        #self.proiettile = []
         self.check = False
         
         proiettile_width = self.img.get_width() // 5
@@ -16,17 +17,17 @@ class Proiettile:
         
         self.img = self.img.subsurface((0, 0, proiettile_width, proiettile_height))
         
-        # for i in range(5):
-        #     startx = i * proiettile_width
-        #     img_part = self.img.subsurface((startx, 0, proiettile_width, proiettile_height))
-        #     img_part = pygame.transform.scale(img_part, (50, 50))
-        #     self.proiettile.append(img_part)
+        #for i in range(5):
+        #    startx = i * proiettile_width
+        #    img_part = self.img.subsurface((startx, 0, proiettile_width, proiettile_height))
+        #    img_part = pygame.transform.scale(img_part, (50, 50))
+        #    self.proiettile.append(img_part)
         
 
-    def move(self, aereo, key, dimx):
-        self.rect.y = aereo.rect.y - VEL
+    def move(self, aereo):
+        self.rect.y = aereo.y - VEL
         if self.check == False:
-            self.rect.x = aereo.rect.x + dimx//2
+            self.rect.x = aereo.x + aereo.width//2
             self.check = True
 
     def draw(self, screen, ind):
