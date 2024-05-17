@@ -11,9 +11,8 @@ WIDTH = 500
 IND = 0
 
 class Aereo:
-    def __init__(self, rect, img, img_effetti, rect2, screen, time = 0):
+    def __init__(self, rect, img, img_effetti, screen, time = 0):
         self.rect = rect
-        self.rect2 = rect2
         self.img = img
         self.screen = screen
         self.time = time
@@ -42,16 +41,12 @@ class Aereo:
     def move(self, screen, key, lasc, pos):
         if key[pygame.K_w] and self.rect.y - VEL >= 0:
             self.rect.y -= VEL
-            self.rect2.y -= VEL
         if key[pygame.K_s] and self.rect.y + VEL <= HEIGHT-100:
             self.rect.y += VEL
-            self.rect2.y += VEL
         if key[pygame.K_a] and self.rect.x - VEL >= 0:
             self.rect.x -= VEL
-            self.rect2.x -= VEL
         if key[pygame.K_d] and self.rect.x + VEL <= WIDTH-100:
             self.rect.x += VEL
-            self.rect2.x += VEL
             
         if self.var == True:
             if int(self.ind) > 0 and self.positivo == True:
@@ -78,6 +73,6 @@ class Aereo:
 
         
     def draw(self, screen):
-        screen.blit(self.jet[int(self.ind)], (self.rect2.x, self.rect2.y))
-        screen.blit(self.effetti[int(self.time) % 8], (self.rect2.x, self.rect2.y + 2))
+        screen.blit(self.jet[int(self.ind)], (self.rect.x, self.rect.y))
+        screen.blit(self.effetti[int(self.time) % 8], (self.rect.x, self.rect.y + 2))
         self.time += 0.2
