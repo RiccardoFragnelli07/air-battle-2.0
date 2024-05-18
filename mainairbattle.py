@@ -10,6 +10,7 @@ pygame.init()
 
 WIDTH, HEIGHT = 500, 700
 WHITE = (255,0,0)
+BLACK = (0,0,0)
 VEL_SFONDO = 3
 
 
@@ -84,6 +85,11 @@ while gameover == False:
     lista_proiettili = move_proiettili(lista_proiettili)
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
+    #for proiettile, i in enumerate(lista_proiettili):
+    #    for nemico, j in enumerate(lista_nemici):
+    #        if proiettile.rect.colliderect(nemico.rect):
+    #            lista_nemici.pop(j)
+    #            lista_proiettili.pop(i)
     aereo.draw(screen) 
     draw_nemico(lista_nemici, screen)
     draw_proiettili(lista_proiettili, screen)
@@ -96,10 +102,22 @@ while gameover == False:
     for nemico in lista_nemici:
         if aereo.rect.colliderect(nemico.rect):
             gameover = True
+    for proiettile, i in enumerate(lista_proiettili):
+        for nemico, j in enumerate(lista_nemici):
+            #dice che il proiettile o il nemico non hanno l'attributo rect perchè sono degli int
+            if proiettile.rect.colliderect(nemico.rect):
+               lista_nemici.pop(j)
+               lista_proiettili.pop(i)
     contatore += 1
     tempo = int(contatore / 60)
     pygame.display.update()
-    
+
+for i in range(20):
+    sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
+    sfondo_gameover = pygame.transform.scale(sfondo_gameover, (500, 500))
+    screen.fill(BLACK)
+    screen.blit(sfondo_gameover, (0, 100))
+    pygame.display.update()
 
 pygame.quit()
 
