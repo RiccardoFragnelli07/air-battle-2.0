@@ -4,7 +4,7 @@ from random import randint
 from aereo import Aereo
 from proiettile import Proiettile, draw_proiettili, move_proiettili
 from nemico import Nemico, move_nemico, draw_nemico
-from caricaTexture import carica_texture_jet, carica_texture_nemici
+from funzioni import carica_texture_jet, carica_texture_nemici, collisione_pn
 
 pygame.init()
 
@@ -19,27 +19,23 @@ proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 60, 60
 dim_fuoco_x, dim_fuoco_y = 800, 100
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
 jetNemico_y, dim_jetNemico_x, dim_jetNemico_y = 0, 50, 50
-img_jetNemico = pygame.image.load("immagini\\NBomber.png")
-img_jetNemico = pygame.transform.rotate(img_jetNemico, 180)
 lista_nemici = []
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("AIR BATTLE")
 
-jet_texture = []
-nemici_texture = []
-carica_texture_jet(jet_texture)
-carica_texture_nemici(nemici_texture)
+jet_texture = carica_texture_jet()
+nemici_texture = carica_texture_nemici()
 
 sfondo = pygame.image.load("immagini\\Background.jpg")
 img_proiettile = pygame.image.load("immagini\\Laser.png")
 img_proiettile = pygame.transform.rotate(img_proiettile, 270)
 img_effetti = pygame.image.load("immagini\\EngineEffect.png")
-
 sfondo = pygame.transform.rotate(sfondo, 90)
 sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 img_effetti = pygame.transform.scale(img_effetti, (dim_fuoco_x, dim_fuoco_y))
-aereo = Aereo(aereo_rect, jet_texture[1][1], img_effetti, screen)
+jet = 0
+aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
 
 lista_proiettili = []
 tempo = 0
@@ -74,40 +70,31 @@ while gameover == False:
     key_pressed = pygame.key.get_pressed()
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 
-    if tempo != 0 and tempo % 3 == 0 and tempo == (contatore / 60):
-        # jetNemico_x = randint(0, WIDTH-dim_jetNemico_x)
-        # nemico_rect = pygame.Rect(jetNemico_x, jetNemico_y, dim_jetNemico_x, dim_jetNemico_y)
-        n = Nemico(tempo, nemici_texture)
-        lista_nemici.append(n)
+    if tempo != 0 and tempo % 1 == 0 and tempo == (contatore / 60):
+        q = Nemico(tempo, nemici_texture)
+        lista_nemici.append(q)
 
     lista_nemici = move_nemico(lista_nemici)
     aereo.move(screen, key_pressed, lasciato_ad, mouse_pos)
     lista_proiettili = move_proiettili(lista_proiettili)
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
-    #for proiettile, i in enumerate(lista_proiettili):
-    #    for nemico, j in enumerate(lista_nemici):
-    #        if proiettile.rect.colliderect(nemico.rect):
-    #            lista_nemici.pop(j)
-    #            lista_proiettili.pop(i)
     aereo.draw(screen) 
     draw_nemico(lista_nemici, screen)
     draw_proiettili(lista_proiettili, screen)
     
+    for nemico in lista_nemici:
+        if aereo.rectv.colliderect(nemico.rect):
+            gameover = True
+    
+    # ho dovuto fare questa roba con la funzione pk se no dava l'errore out of range
+    while collisione_pn(lista_proiettili, lista_nemici) == 0:
+        pass
+                
     if conta >= HEIGHT:
         conta = 0
     else:
         conta += VEL_SFONDO
-    
-    for nemico in lista_nemici:
-        if aereo.rect.colliderect(nemico.rect):
-            gameover = True
-    for proiettile, i in enumerate(lista_proiettili):
-        for nemico, j in enumerate(lista_nemici):
-            #dice che il proiettile o il nemico non hanno l'attributo rect perchè sono degli int
-            if proiettile.rect.colliderect(nemico.rect):
-               lista_nemici.pop(j)
-               lista_proiettili.pop(i)
     contatore += 1
     tempo = int(contatore / 60)
     pygame.display.update()

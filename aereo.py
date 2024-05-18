@@ -1,8 +1,8 @@
 import pygame
 import math
-import funzioni
+from funzioni import carica_texture_jet, distanza_punti
 
-VEL = 5
+VEL = 7
 ROTAZIONE = 0.7
 MAX_ROTAZIONE = 11
 DEROTAZIONE = 1.2
@@ -10,8 +10,15 @@ HEIGHT = 690
 WIDTH = 500
 IND = 0
 
+base_rect = pygame.Rect(150, 545, 100, 100)
+img_texture = carica_texture_jet()
+arr = [pygame.Rect(base_rect.x + 12, base_rect.y + 9, 74, 67),
+       pygame.Rect(base_rect.x + 11, base_rect.y + 14, 78, 40),
+       pygame.Rect(base_rect.x + 12, base_rect.y + 9, 74, 67),
+       pygame.Rect(base_rect.x + 21, base_rect.y + 12, 56, 69)]
+
 class Aereo:
-    def __init__(self, rect, img, img_effetti, screen, time = 0):
+    def __init__(self, rect, img, img_effetti, screen, num, time = 0):
         self.rect = rect
         self.img = img
         self.screen = screen
@@ -20,6 +27,9 @@ class Aereo:
         self.var = False
         self.effetti = []
         self.positivo = True
+        self.num = num
+        self.rectv = arr[self.num]
+        
         effetti_width = img_effetti.get_width() // 8
         effetti_height = img_effetti.get_height()
         for i in range(8):
@@ -41,12 +51,16 @@ class Aereo:
     def move(self, screen, key, lasc, pos):
         if key[pygame.K_w] and self.rect.y - VEL >= 0:
             self.rect.y -= VEL
+            self.rectv.y -= VEL
         if key[pygame.K_s] and self.rect.y + VEL <= HEIGHT-100:
             self.rect.y += VEL
+            self.rectv.y += VEL
         if key[pygame.K_a] and self.rect.x - VEL >= 0:
             self.rect.x -= VEL
+            self.rectv.x -= VEL
         if key[pygame.K_d] and self.rect.x + VEL <= WIDTH-100:
             self.rect.x += VEL
+            self.rectv.x += VEL
             
         if self.var == True:
             if int(self.ind) > 0 and self.positivo == True:

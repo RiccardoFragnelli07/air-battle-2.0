@@ -10,4 +10,4 @@
 # print(lista)
 
 import math
-print(math.tanh())
+n = math.atan(2.33333)

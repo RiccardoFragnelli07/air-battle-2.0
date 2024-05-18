@@ -1,66 +1,56 @@
 import pygame
 import math
 from random import randint
+from funzioni import genera_navicella
 
 WIDTH, HEIGHT = 500, 700
 VEL = 7
 PIGRECO = math.pi
 
 
-nemico1_x, nemico1_y, dim_nemico1_x, dim_nemico1_y = 0, 0, 90, 90       # Fighter
-nemico2_x, nemico2_y, dim_nemico2_x, dim_nemico2_y = 0, 0, 90, 90       # Bomber
-nemico3_x, nemico3_y, dim_nemico3_x, dim_nemico3_y = 0, 0, 130, 130     # Torpedo
-nemico4_x, nemico4_y, dim_nemico4_x, dim_nemico4_y = 0, 0, 130, 130     # Frigate
-nemico5_x, nemico5_y, dim_nemico5_x, dim_nemico5_y = 0, 0, 200, 250     # Battlecruiser
-nemico6_x, nemico6_y, dim_nemico6_x, dim_nemico6_y = 0, 0, 200, 200     # Dreadnought
+nemico1_x, nemico1_y, dim_nemico1_x, dim_nemico1_y = 0, 0, 70, 70       # Scout
+nemico2_x, nemico2_y, dim_nemico2_x, dim_nemico2_y = 0, 0, 70, 70       # Bomber
+nemico3_x, nemico3_y, dim_nemico3_x, dim_nemico3_y = 0, 0, 90, 90       # Frigate
+nemico4_x, nemico4_y, dim_nemico4_x, dim_nemico4_y = 0, 0, 130, 130     # Cruiser
+nemico6_x, nemico6_y, dim_nemico6_x, dim_nemico6_y = 0, 0, 200, 200     # Heavycruiser
+nemico5_x, nemico5_y, dim_nemico5_x, dim_nemico5_y = 0, 0, 200, 200     # Battleship
+nemico7_x, nemico7_y, dim_nemico7_x, dim_nemico7_y = 0, 0, 220, 220,    # Mothership 
+nemico8_x, nemico8_y, dim_nemico8_x, dim_nemico8_y = 0, 0, 220, 220,    # Spacestation          
 
-diz = {0 : pygame.Rect(nemico1_x, nemico1_y, dim_nemico1_x, dim_nemico1_y), 
-       1 : pygame.Rect(nemico2_x, nemico2_y, dim_nemico2_x, dim_nemico2_y),
-       2 : pygame.Rect(nemico3_x, nemico3_y, dim_nemico3_x, dim_nemico3_y),
-       3 : pygame.Rect(nemico4_x, nemico4_y, dim_nemico4_x, dim_nemico4_y),
-       4 : pygame.Rect(nemico5_x, nemico5_y, dim_nemico5_x, dim_nemico5_y),
-       5 : pygame.Rect(nemico6_x, nemico6_y, dim_nemico6_x, dim_nemico6_y)}
-
+arr = [[nemico1_x, nemico1_y, dim_nemico1_x, dim_nemico1_y],
+       [nemico2_x, nemico2_y, dim_nemico2_x, dim_nemico2_y],
+       [nemico3_x, nemico3_y, dim_nemico3_x, dim_nemico3_y],
+       [nemico4_x, nemico4_y, dim_nemico4_x, dim_nemico4_y],
+       [nemico5_x, nemico5_y, dim_nemico5_x, dim_nemico5_y],
+       [nemico6_x, nemico6_y, dim_nemico6_x, dim_nemico6_y],
+       [nemico7_x, nemico7_y, dim_nemico7_x, dim_nemico7_y],
+       [nemico8_x, nemico8_y, dim_nemico8_x, dim_nemico8_y]]
 
 class Nemico:
     def __init__(self, time, texture):
         self.time = time
-        if self.time >= 0 and self.time <= 30:
-            navicella = randint(0, 1)
-        elif self.time > 30 and self.time <= 60:
-            navicella = randint(0, 3)
-        else:
-            num = randint(1, 100)
-            if num >= 1 and num <= 30:
-                navicella = randint(0, 1)
-            elif num > 30 and num <= 80:
-                navicella = randint(2, 3)
-            else:
-                navicella = randint(4, 5)
-                
-        self.rect = diz[navicella]
-        self.img = texture[navicella][randint(0, 1)]
-        self.img = pygame.transform.scale(self.img, (diz[navicella].width, diz[navicella].height))
-        self.rect.y = 0
+        num = genera_navicella(self.time)   
+        self.rect = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
+        self.img = texture[num]
+        self.img = pygame.transform.scale(self.img, (self.rect.width, self.rect.height))
         self.rect.x = randint(0, WIDTH - self.rect.width)
         self.arrivo = randint(0, WIDTH - self.rect.width)
+        
+        # cat = self.arrivo - self.rect.x
+        # if cat != 0:
+        #     alfa = math.atan(abs(cat / HEIGHT))
+        #     self.velx = VEL * math.cos(alfa)
+        #     self.vely = VEL * math.sin(alfa)
+        # else:
+        #     self.velx = 0
+        #     self.vely = VEL
 
 
 def move_nemico(lista):
-    cat1 = HEIGHT
     temp = []
     for nemico in lista:
-        # if nemico.rect.x != nemico.arrivo:
-        #     cat2 = nemico.rect.x - nemico.arrivo
-        #     alfa = math.atan(abs(cat1 / cat2))
-        #     velx = VEL * math.cos(alfa)
-        #     vely = VEL * math.sin(alfa)
-        # else:
-        #     velx = 0
-        #     vely = VEL
-        # print(alfa, velx, vely)
-        # nemico.rect.x += velx
-        # nemico.rect.y += vely
+        # nemico.rect.x += nemico.vely
+        # nemico.rect.y += nemico.velx
         nemico.rect.y += VEL
     for nemico in lista:
         if nemico.rect.y < HEIGHT:

@@ -13,14 +13,6 @@ class Proiettile:
         self.check = False
         self.img = pygame.transform.scale(self.img, (30, 50))
         
-        # proiettile_width = self.img.get_width() // 5
-        # proiettile_height = self.img.get_height()
-        # for i in range(5):
-        #    startx = i * proiettile_width
-        #    img_part = self.img.subsurface((startx, 0, proiettile_width, proiettile_height))
-        #    img_part = pygame.transform.scale(img_part, (30, 30))
-        #    self.proiettili.append(img_part)
-        
 
 def move_proiettili(lista):
     for i in range(len(lista)):
@@ -31,19 +23,8 @@ def move_proiettili(lista):
         if lista[i].rect.y >= 0:
             tmp.append(lista[i])
     return tmp
-
-    # for i in range(len(lista)):
-    #     lista[i][0].rect.y -= VEL
-    #     if lista[i][1] > 4:
-    #         lista[i][1] = 0
-    #     lista[i][1] += 0.2        
-    # tmp = []
-    # for i in range(len(lista)):
-    #     if lista[i][0].rect.y >= 0:
-    #         tmp.append(lista[i])
+           
                 
 def draw_proiettili(lista, screen):
     for i in range(len(lista)):
         screen.blit(lista[i].img, (lista[i].rect.x, lista[i].rect.y))
-    # for i in range(len(lista)):
-    #     screen.blit(lista[i][0].proiettili[int(lista[i][1])], (lista[i][0].rect.x, lista[i][0].rect.y))
