@@ -4,7 +4,7 @@ from random import randint
 from aereo import Aereo
 from proiettile import Proiettile, draw_proiettili, move_proiettili, genera_proiettile
 from nemico import Nemico, move_nemico, draw_nemico
-from funzioni import carica_texture_jet, carica_texture_nemici, collisione_pn, multiplo
+from funzioni import carica_texture_spaceships, carica_texture_nemici, collisione_pn, multiplo
 
 pygame.init()
 
@@ -12,7 +12,7 @@ WIDTH, HEIGHT = 500, 700
 WHITE = (255,0,0)
 BLACK = (0,0,0)
 VEL_SFONDO = 3
-FREQ_PROIETTILI = 0.2     # i proiettili possono venire sparati dopo 0.1 secondi dal proiettile precedente
+FREQ_PROIETTILI = 0.15     # i proiettili possono venire sparati dopo 0.1 secondi dal proiettile precedente
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
 sound_laser = pygame.mixer.Sound("suoni\\laser-sound-1.mp3")
 
@@ -26,7 +26,7 @@ lista_nemici = []
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("AIR BATTLE")
 
-jet_texture = carica_texture_jet()
+jet_texture = carica_texture_spaceships()
 nemici_texture = carica_texture_nemici()
 
 sfondo = pygame.image.load("immagini\\Background.jpg")
@@ -92,12 +92,12 @@ while gameover == False:
     lista_proiettili = move_proiettili(lista_proiettili)
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
-    aereo.draw(screen) 
     draw_nemico(lista_nemici, screen)
+    aereo.draw(screen) 
     draw_proiettili(lista_proiettili, screen)
     
     for nemico in lista_nemici:
-        if aereo.rectv.colliderect(nemico.rect):
+        if aereo.rectv.colliderect(nemico.rectv):
             gameover = True
     
     # ho dovuto fare questa roba con la funzione pk se no dava l'errore out of range
@@ -117,7 +117,6 @@ font = pygame.font.SysFont("Times New Roman", 50)
 surf_text = font.render(f"Punteggio: {punteggio_finale}", True, "red")
 
 sound_death.play()
-
 for i in range(150):
     sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
     sfondo_gameover = pygame.transform.scale(sfondo_gameover, (500, 500))

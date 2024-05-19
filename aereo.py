@@ -1,6 +1,6 @@
 import pygame
 import math
-from funzioni import carica_texture_jet, distanza_punti
+from funzioni import carica_texture_spaceships, distanza_punti
 
 VEL = 7
 ROTAZIONE = 0.7
@@ -11,11 +11,11 @@ WIDTH = 500
 IND = 0
 
 base_rect = pygame.Rect(150, 545, 100, 100)
-img_texture = carica_texture_jet()
-arr = [pygame.Rect(base_rect.x + 12, base_rect.y + 9, 74, 67),
-       pygame.Rect(base_rect.x + 11, base_rect.y + 14, 78, 40),
-       pygame.Rect(base_rect.x + 12, base_rect.y + 9, 74, 67),
-       pygame.Rect(base_rect.x + 21, base_rect.y + 12, 56, 69)]
+img_texture = carica_texture_spaceships()
+arr = [[base_rect.x + 12, base_rect.y + 9, 74, 67],
+       [base_rect.x + 11, base_rect.y + 14, 78, 40],
+       [base_rect.x + 12, base_rect.y + 9, 74, 67],
+       [base_rect.x + 21, base_rect.y + 12, 56, 69]]
 
 class Aereo:
     def __init__(self, rect, img, img_effetti, screen, num, time = 0):
@@ -23,12 +23,12 @@ class Aereo:
         self.img = img
         self.screen = screen
         self.time = time
-        self.ind = 0
         self.var = False
         self.effetti = []
         self.positivo = True
         self.num = num
-        self.rectv = arr[self.num]
+        self.ind = 0
+        self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
         
         effetti_width = img_effetti.get_width() // 8
         effetti_height = img_effetti.get_height()
@@ -46,6 +46,7 @@ class Aereo:
             img_part = self.img.subsurface((startx, 0, jet_width, jet_height))
             img_part = pygame.transform.scale(img_part, (100, 100))
             self.jet.append(img_part)
+
             
         
     def move(self, screen, key, lasc, pos):

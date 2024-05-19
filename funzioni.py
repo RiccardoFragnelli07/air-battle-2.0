@@ -3,7 +3,7 @@ import pygame
 from random import randint
 import math
 
-def carica_texture_jet():
+def carica_texture_spaceships():
     immagini = []
     immagini.append([])
     immagini.append([])
@@ -19,6 +19,8 @@ def carica_texture_jet():
     immagini[1].append(pygame.image.load("immagini\\SF04a_strip60.png"))
     
     return immagini
+
+
     
 def carica_texture_nemici(immagini = []):
     immagini = []
@@ -64,3 +66,41 @@ def multiplo(tempo, num):
 
 def distanza_punti(a, b):
     return ((a.x - b.x)**2 + (a.y - b.y)**2)**(0.5)
+
+
+# def carica_texture_jet():
+#     immagini = []
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet0.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet29.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet30.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet28.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet27.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet26.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet25.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet24.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet23.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet22.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet21.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet20.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet19.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet18.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet17.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet16.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet15.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet14.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet13.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet12.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet11.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet10.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet9.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet8.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet7.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet6.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet5.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet4.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet3.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet2.png"))
+#     immagini.append(pygame.image.load("immagini\\jet_images\\jet1.png"))
+#     # for img in immagini:
+#     #     img = pygame.transform.scale(img, (100, 100))
+#     return immagini
