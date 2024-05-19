@@ -47,12 +47,13 @@ def genera_navicella(time):
             navicella = randint(4, 5)
     return navicella
 
-def collisione_pn(l1, l2):
+def collisione_pn(l1, l2, punteggio, temp):
     for i in range(len(l1)):
         for j in range(len(l2)):
             if l1[i].rect.colliderect(l2[j]):
                 l1.pop(i)
                 l2.pop(j)
+                punteggio[0] += temp+100
                 return 0
 
 def distanza_punti(a, b):

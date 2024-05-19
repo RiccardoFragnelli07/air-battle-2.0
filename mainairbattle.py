@@ -45,6 +45,9 @@ FPS = 60
 clock = pygame.time.Clock()
 gameover = False
 conta1 = 0
+punteggio = [0]
+punteggio[0] = 0
+temporanea = 0
 
 while gameover == False:
     spara = False
@@ -88,7 +91,7 @@ while gameover == False:
             gameover = True
     
     # ho dovuto fare questa roba con la funzione pk se no dava l'errore out of range
-    while collisione_pn(lista_proiettili, lista_nemici) == 0:
+    while collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea) == 0:
         pass
                 
     if conta >= HEIGHT:
@@ -99,11 +102,16 @@ while gameover == False:
     tempo = int(contatore / 60)
     pygame.display.update()
 
+punteggio_finale = punteggio[0]
+font = pygame.font.SysFont("Times New Roman", 50)
+surf_text = font.render(f"Punteggio: {punteggio_finale}", True, "red")
+
 for i in range(20):
     sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
     sfondo_gameover = pygame.transform.scale(sfondo_gameover, (500, 500))
     screen.fill(BLACK)
     screen.blit(sfondo_gameover, (0, 100))
+    screen.blit(surf_text, (0, 500))
     pygame.display.update()
 
 pygame.quit()
