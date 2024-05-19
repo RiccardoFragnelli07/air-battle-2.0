@@ -55,6 +55,12 @@ def collisione_pn(l1, l2, punteggio, temp):
                 l2.pop(j)
                 punteggio[0] += temp+100
                 return 0
+            
+def multiplo(tempo, num):
+    a = tempo / num
+    if (int(tempo / num) == a):
+        return True
+    return False
 
 def distanza_punti(a, b):
     return ((a.x - b.x)**2 + (a.y - b.y)**2)**(0.5)

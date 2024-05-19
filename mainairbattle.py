@@ -2,9 +2,9 @@ import pygame
 import os
 from random import randint
 from aereo import Aereo
-from proiettile import Proiettile, draw_proiettili, move_proiettili
+from proiettile import Proiettile, draw_proiettili, move_proiettili, genera_proiettile
 from nemico import Nemico, move_nemico, draw_nemico
-from funzioni import carica_texture_jet, carica_texture_nemici, collisione_pn
+from funzioni import carica_texture_jet, carica_texture_nemici, collisione_pn, multiplo
 
 pygame.init()
 
@@ -12,7 +12,7 @@ WIDTH, HEIGHT = 500, 700
 WHITE = (255,0,0)
 BLACK = (0,0,0)
 VEL_SFONDO = 3
-
+FREQ_PROIETTILI = 0.2     # i proiettili possono venire sparati dopo 0.1 secondi dal proiettile precedente
 
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 100, 100
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 60, 60
@@ -48,6 +48,7 @@ conta1 = 0
 punteggio = [0]
 punteggio[0] = 0
 temporanea = 0
+ultimo_proiettile = 0
 
 while gameover == False:
     spara = False
@@ -73,9 +74,15 @@ while gameover == False:
     key_pressed = pygame.key.get_pressed()
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 
-    if tempo != 0 and tempo % 1 == 0 and tempo == (contatore / 60):
+    if tempo != 0 and int(tempo) % 1 == 0 and int(tempo) == (contatore / 60):
         q = Nemico(tempo, nemici_texture)
         lista_nemici.append(q)
+        
+    if key_pressed[pygame.K_SPACE] and tempo - ultimo_proiettile >= FREQ_PROIETTILI:
+        proiettile_rect = pygame.Rect(aereo.rect.x + (aereo_rect.width // 2) - 10, aereo_rect.y, dim_proiettile_x, dim_proiettile_y)
+        p = Proiettile(proiettile_rect, img_proiettile, screen)
+        lista_proiettili.append(p)
+        ultimo_proiettile = tempo
 
     lista_nemici = move_nemico(lista_nemici)
     aereo.move(screen, key_pressed, lasciato_ad, mouse_pos)
@@ -99,7 +106,7 @@ while gameover == False:
     else:
         conta += VEL_SFONDO
     contatore += 1
-    tempo = int(contatore / 60)
+    tempo = contatore / 60
     pygame.display.update()
 
 punteggio_finale = punteggio[0]

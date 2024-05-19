@@ -10,4 +10,10 @@
 # print(lista)
 
 import math
+from funzioni import multiplo
 n = math.atan(2.33333)
+
+tempo = 1.2
+print(1 / 5)
+print(tempo % 0.2 == 0)
+print(multiplo(tempo, 0.3))

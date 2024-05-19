@@ -13,6 +13,12 @@ class Proiettile:
         self.check = False
         self.img = pygame.transform.scale(self.img, (30, 50))
         
+        
+def genera_proiettile(lista, key, time):
+    if key[pygame.K_SPACE]:
+        pass
+        
+        
 
 def move_proiettili(lista):
     for i in range(len(lista)):
