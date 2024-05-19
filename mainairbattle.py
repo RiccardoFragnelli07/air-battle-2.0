@@ -13,6 +13,8 @@ WHITE = (255,0,0)
 BLACK = (0,0,0)
 VEL_SFONDO = 3
 FREQ_PROIETTILI = 0.2     # i proiettili possono venire sparati dopo 0.1 secondi dal proiettile precedente
+sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
+sound_laser = pygame.mixer.Sound("suoni\\laser-sound-1.mp3")
 
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 100, 100
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 60, 60
@@ -79,6 +81,7 @@ while gameover == False:
         lista_nemici.append(q)
         
     if key_pressed[pygame.K_SPACE] and tempo - ultimo_proiettile >= FREQ_PROIETTILI:
+        sound_laser.play()
         proiettile_rect = pygame.Rect(aereo.rect.x + (aereo_rect.width // 2) - 10, aereo_rect.y, dim_proiettile_x, dim_proiettile_y)
         p = Proiettile(proiettile_rect, img_proiettile, screen)
         lista_proiettili.append(p)
@@ -113,11 +116,13 @@ punteggio_finale = punteggio[0]
 font = pygame.font.SysFont("Times New Roman", 50)
 surf_text = font.render(f"Punteggio: {punteggio_finale}", True, "red")
 
-for i in range(20):
+sound_death.play()
+
+for i in range(150):
     sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
     sfondo_gameover = pygame.transform.scale(sfondo_gameover, (500, 500))
     screen.fill(BLACK)
-    screen.blit(sfondo_gameover, (0, 100))
+    screen.blit(sfondo_gameover, (-10, 100))
     screen.blit(surf_text, (0, 500))
     pygame.display.update()
 
