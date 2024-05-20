@@ -4,7 +4,7 @@ from random import randint
 from funzioni import genera_navicella
 
 WIDTH, HEIGHT = 500, 700
-VEL = 7
+VEL = 5
 PIGRECO = math.pi
 
 
@@ -48,6 +48,8 @@ class Nemico:
         self.rectv.x = self.rect.x + rectv[num][0]
         self.arrivo = randint(0, WIDTH - self.rect.width)
         
+        self.jet = []
+        
         # cat = self.arrivo - self.rect.x
         # if cat != 0:
         #     alfa = math.atan(abs(cat / HEIGHT))
@@ -56,6 +58,12 @@ class Nemico:
         # else:
         #     self.velx = 0
         #     self.vely = VEL
+        
+        # cat1 = HEIGHT
+        # cat2 = self.rect.x - self.arrivo
+        # self.velx = VEL * math.sin(math.atan(cat1 / cat2))
+        # self.vely = VEL * math.cos(math.atan(cat1 / cat2))
+        
 
 
 def move_nemico(lista):
@@ -63,9 +71,10 @@ def move_nemico(lista):
     for nemico in lista:
         # nemico.rect.x += nemico.vely
         # nemico.rect.y += nemico.velx
+        # nemico.rectv.x += nemico.vely
+        # nemico.rectv.y += nemico.velx
         nemico.rect.y += VEL
         nemico.rectv.y += VEL
-        print(nemico.rectv, nemico.rect)
     for nemico in lista:
         if nemico.rect.y < HEIGHT:
             temp.append(nemico)

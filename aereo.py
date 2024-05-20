@@ -38,6 +38,10 @@ class Aereo:
             self.effetti.append(img_part)
         self.centro_aereo = pygame.math.Vector2(self.rect.x + self.rect.width, self.rect.y + self.rect.height)
         
+        # self.jet = self.img
+        # for i in range(len(self.jet)):
+        #     self.jet[i] = pygame.transform.scale(self.jet[i], (120, 120))
+        
         self.jet = []
         jet_width = self.img.get_width() // 60
         jet_height = self.img.get_height()
@@ -89,5 +93,5 @@ class Aereo:
         
     def draw(self, screen):
         screen.blit(self.jet[int(self.ind)], (self.rect.x, self.rect.y))
-        screen.blit(self.effetti[int(self.time) % 8], (self.rect.x, self.rect.y + 2))
+        # screen.blit(self.effetti[int(self.time) % 8], (self.rect.x, self.rect.y + 2))
         self.time += 0.2

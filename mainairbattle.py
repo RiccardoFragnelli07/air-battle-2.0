@@ -4,7 +4,7 @@ from random import randint
 from aereo import Aereo
 from proiettile import Proiettile, draw_proiettili, move_proiettili, genera_proiettile
 from nemico import Nemico, move_nemico, draw_nemico
-from funzioni import carica_texture_spaceships, carica_texture_nemici, collisione_pn, multiplo
+from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_texture_jet, collisione_pn, multiplo
 
 pygame.init()
 
@@ -27,6 +27,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("AIR BATTLE")
 
 jet_texture = carica_texture_spaceships()
+# jet_texture = carica_texture_jet()
 nemici_texture = carica_texture_nemici()
 
 sfondo = pygame.image.load("immagini\\Background.jpg")
@@ -36,7 +37,7 @@ img_effetti = pygame.image.load("immagini\\EngineEffect.png")
 sfondo = pygame.transform.rotate(sfondo, 90)
 sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 img_effetti = pygame.transform.scale(img_effetti, (dim_fuoco_x, dim_fuoco_y))
-jet = 0
+jet = 3
 aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
 
 lista_proiettili = []
@@ -116,14 +117,14 @@ punteggio_finale = punteggio[0]
 font = pygame.font.SysFont("Times New Roman", 50)
 surf_text = font.render(f"Punteggio: {punteggio_finale}", True, "red")
 
-sound_death.play()
-for i in range(150):
-    sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
-    sfondo_gameover = pygame.transform.scale(sfondo_gameover, (500, 500))
-    screen.fill(BLACK)
-    screen.blit(sfondo_gameover, (-10, 100))
-    screen.blit(surf_text, (0, 500))
-    pygame.display.update()
+# sound_death.play()
+# for i in range(150):
+#     sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
+#     sfondo_gameover = pygame.transform.scale(sfondo_gameover, (500, 500))
+#     screen.fill(BLACK)
+#     screen.blit(sfondo_gameover, (-10, 100))
+#     screen.blit(surf_text, (0, 500))
+#     pygame.display.update()
 
 pygame.quit()
 
