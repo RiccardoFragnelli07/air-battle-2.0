@@ -53,7 +53,7 @@ class Aereo:
 
             
         
-    def move(self, screen, key, lasc, pos):
+    def move(self, key, lista, lasc, pos):
         if key[pygame.K_w] and self.rect.y - VEL >= 0:
             self.rect.y -= VEL
             self.rectv.y -= VEL
@@ -63,9 +63,15 @@ class Aereo:
         if key[pygame.K_a] and self.rect.x - VEL >= 0:
             self.rect.x -= VEL
             self.rectv.x -= VEL
+            # if key[pygame.K_SPACE]:
+            #     for p in lista:
+            #         p.rect.x -= VEL
         if key[pygame.K_d] and self.rect.x + VEL <= WIDTH-100:
             self.rect.x += VEL
             self.rectv.x += VEL
+            # if key[pygame.K_SPACE]:
+            #     for p in lista:
+            #         p.rect.x += VEL
             
         if self.var == True:
             if int(self.ind) > 0 and self.positivo == True:

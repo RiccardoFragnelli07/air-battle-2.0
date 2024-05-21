@@ -1,4 +1,5 @@
 import pygame
+import math
 import os
 from random import randint
 from aereo import Aereo
@@ -37,7 +38,7 @@ img_effetti = pygame.image.load("immagini\\EngineEffect.png")
 sfondo = pygame.transform.rotate(sfondo, 90)
 sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 img_effetti = pygame.transform.scale(img_effetti, (dim_fuoco_x, dim_fuoco_y))
-jet = 3
+jet = 1
 aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
 
 lista_proiettili = []
@@ -81,15 +82,15 @@ while gameover == False:
         q = Nemico(tempo, nemici_texture)
         lista_nemici.append(q)
         
-    if key_pressed[pygame.K_SPACE] and tempo - ultimo_proiettile >= FREQ_PROIETTILI:
-        sound_laser.play()
-        proiettile_rect = pygame.Rect(aereo.rect.x + (aereo_rect.width // 2) - 10, aereo_rect.y, dim_proiettile_x, dim_proiettile_y)
-        p = Proiettile(proiettile_rect, img_proiettile, screen)
-        lista_proiettili.append(p)
-        ultimo_proiettile = tempo
+    # if key_pressed[pygame.K_SPACE] and tempo - ultimo_proiettile >= FREQ_PROIETTILI:
+    #     sound_laser.play()
+    #     proiettile_rect = pygame.Rect(aereo.rect.x + (aereo_rect.width // 2) - 10, aereo_rect.y, dim_proiettile_x, dim_proiettile_y)
+    #     p = Proiettile(proiettile_rect, img_proiettile, screen)
+    #     lista_proiettili.append(p)
+    #     ultimo_proiettile = tempo
 
     lista_nemici = move_nemico(lista_nemici)
-    aereo.move(screen, key_pressed, lasciato_ad, mouse_pos)
+    aereo.move(key_pressed, lista_proiettili, lasciato_ad, mouse_pos)
     lista_proiettili = move_proiettili(lista_proiettili)
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))

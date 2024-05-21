@@ -47,36 +47,36 @@ class Nemico:
         self.rect.x = randint(0, WIDTH - self.rect.width)
         self.rectv.x = self.rect.x + rectv[num][0]
         self.arrivo = randint(0, WIDTH - self.rect.width)
+        # self.rect.x = WIDTH
+        # self.rectv.x = self.rect.x + rectv[num][0]
         
         self.jet = []
         
-        # cat = self.arrivo - self.rect.x
-        # if cat != 0:
-        #     alfa = math.atan(abs(cat / HEIGHT))
-        #     self.velx = VEL * math.cos(alfa)
-        #     self.vely = VEL * math.sin(alfa)
-        # else:
-        #     self.velx = 0
-        #     self.vely = VEL
-        
-        # cat1 = HEIGHT
-        # cat2 = self.rect.x - self.arrivo
-        # self.velx = VEL * math.sin(math.atan(cat1 / cat2))
-        # self.vely = VEL * math.cos(math.atan(cat1 / cat2))
-        
+        cat2 = self.arrivo - self.rect.x
+        if cat2 != 0:
+            alfa = math.atan(abs(HEIGHT / cat2))
+            self.velx = VEL * math.cos(alfa)
+            self.vely = VEL * math.sin(alfa)
+            self.alfa = alfa
+        else:
+            self.velx = 0
+            self.vely = VEL
+            self.alfa = math.radians(90)
+        if cat2 < 0:
+            self.velx *= -1
 
 
 def move_nemico(lista):
     temp = []
     for nemico in lista:
-        # nemico.rect.x += nemico.vely
-        # nemico.rect.y += nemico.velx
-        # nemico.rectv.x += nemico.vely
-        # nemico.rectv.y += nemico.velx
-        nemico.rect.y += VEL
-        nemico.rectv.y += VEL
+        nemico.rect.x += nemico.velx
+        nemico.rect.y += nemico.vely
+        nemico.rectv.x += nemico.velx
+        nemico.rectv.y += nemico.vely
+        # nemico.rect.y += VEL
+        # nemico.rectv.y += VEL
     for nemico in lista:
-        if nemico.rect.y < HEIGHT:
+        if nemico.rect.y <= HEIGHT:
             temp.append(nemico)
 
     return temp
