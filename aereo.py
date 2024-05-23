@@ -1,10 +1,10 @@
 import pygame
 import math
-from funzioni import carica_texture_spaceships, distanza_punti
+from funzioni import carica_texture_spaceships, distanza_punti, carica_texture_jedi
 
 VEL = 7
-ROTAZIONE = 0.7
-MAX_ROTAZIONE = 11
+ROTAZIONE = 0.6
+MAX_ROTAZIONE = 10
 DEROTAZIONE = 1.2
 HEIGHT = 690
 WIDTH = 500
@@ -28,45 +28,47 @@ class Aereo:
         self.positivo = True
         self.num = num
         self.ind = 0
-        self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
+        # self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
+        self.rectv = pygame.Rect(self.rect.x + 84.5, self.rect.y + 21.5, 70.5, 88.5)
         
-        effetti_width = img_effetti.get_width() // 8
-        effetti_height = img_effetti.get_height()
-        for i in range(8):
-            startx = i * effetti_width
-            img_part = img_effetti.subsurface((startx, 0, effetti_width, effetti_height))
-            self.effetti.append(img_part)
-        self.centro_aereo = pygame.math.Vector2(self.rect.x + self.rect.width, self.rect.y + self.rect.height)
+        # effetti_width = img_effetti.get_width() // 8
+        # effetti_height = img_effetti.get_height()
+        # for i in range(8):
+        #     startx = i * effetti_width
+        #     img_part = img_effetti.subsurface((startx, 0, effetti_width, effetti_height))
+        #     self.effetti.append(img_part)
+        # self.centro_aereo = pygame.math.Vector2(self.rect.x + self.rect.width, self.rect.y + self.rect.height)
         
         # self.jet = self.img
         # for i in range(len(self.jet)):
         #     self.jet[i] = pygame.transform.scale(self.jet[i], (120, 120))
         
-        self.jet = []
-        jet_width = self.img.get_width() // 60
-        jet_height = self.img.get_height()
-        for i in range(60):
-            startx = i * jet_width
-            img_part = self.img.subsurface((startx, 0, jet_width, jet_height))
-            img_part = pygame.transform.scale(img_part, (100, 100))
-            self.jet.append(img_part)
+        self.jet = self.img
+        # jet_width = self.img.get_width() // 60
+        # jet_height = self.img.get_height()
+        # for i in range(60):
+        #     startx = i * jet_width
+        #     img_part = self.img.subsurface((startx, 0, jet_width, jet_height))
+        #     img_part = pygame.transform.scale(img_part, (100, 100))
+        #     self.jet.append(img_part)
+        
 
             
         
     def move(self, key, lista, lasc, pos):
-        if key[pygame.K_w] and self.rect.y - VEL >= 0:
+        if key[pygame.K_w] and self.rectv.y - VEL >= 0:
             self.rect.y -= VEL
             self.rectv.y -= VEL
-        if key[pygame.K_s] and self.rect.y + VEL <= HEIGHT-100:
+        if key[pygame.K_s] and self.rectv.y + VEL <= HEIGHT-self.rectv.width:
             self.rect.y += VEL
             self.rectv.y += VEL
-        if key[pygame.K_a] and self.rect.x - VEL >= 0:
+        if key[pygame.K_a] and self.rectv.x - VEL >= 0:
             self.rect.x -= VEL
             self.rectv.x -= VEL
             # if key[pygame.K_SPACE]:
             #     for p in lista:
             #         p.rect.x -= VEL
-        if key[pygame.K_d] and self.rect.x + VEL <= WIDTH-100:
+        if key[pygame.K_d] and self.rectv.x + VEL <= WIDTH-self.rectv.height:
             self.rect.x += VEL
             self.rectv.x += VEL
             # if key[pygame.K_SPACE]:

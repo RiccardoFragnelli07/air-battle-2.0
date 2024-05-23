@@ -5,7 +5,7 @@ from random import randint
 from aereo import Aereo
 from proiettile import Proiettile, draw_proiettili, move_proiettili, genera_proiettile
 from nemico import Nemico, move_nemico, draw_nemico
-from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_texture_jet, collisione_pn, multiplo
+from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_texture_jedi, collisione_pn, multiplo
 
 pygame.init()
 
@@ -17,7 +17,8 @@ FREQ_PROIETTILI = 0.15     # i proiettili possono venire sparati dopo 0.1 second
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
 sound_laser = pygame.mixer.Sound("suoni\\laser-sound-1.mp3")
 
-aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 100, 100
+# aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 100, 100
+aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 480, 270
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 60, 60
 dim_fuoco_x, dim_fuoco_y = 800, 100
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
@@ -31,6 +32,8 @@ jet_texture = carica_texture_spaceships()
 # jet_texture = carica_texture_jet()
 nemici_texture = carica_texture_nemici()
 
+jedi = pygame.image.load("immagini\\jedi_spaceship\\jedi0.png")
+jedi = pygame.transform.scale(jedi, (480, 270))
 sfondo = pygame.image.load("immagini\\Background.jpg")
 img_proiettile = pygame.image.load("immagini\\Laser.png")
 img_proiettile = pygame.transform.rotate(img_proiettile, 270)
@@ -39,7 +42,9 @@ sfondo = pygame.transform.rotate(sfondo, 90)
 sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 img_effetti = pygame.transform.scale(img_effetti, (dim_fuoco_x, dim_fuoco_y))
 jet = 1
-aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
+jedi_nave = carica_texture_jedi()
+# aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
+aereo = Aereo(aereo_rect, jedi_nave, img_effetti, screen, jet)
 
 lista_proiettili = []
 tempo = 0
@@ -64,7 +69,7 @@ while gameover == False:
             
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                proiettile_rect = pygame.Rect(aereo.rect.x + (aereo_rect.width // 2) - 10, aereo_rect.y, dim_proiettile_x, dim_proiettile_y)
+                proiettile_rect = pygame.Rect(aereo.rectv.x + (aereo.rectv.width // 2) - 10, aereo.rect.y, dim_proiettile_x, dim_proiettile_y)
                 p = Proiettile(proiettile_rect, img_proiettile, screen)
                 lista_proiettili.append(p)
                 
