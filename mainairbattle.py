@@ -1,6 +1,7 @@
 import pygame
 import math
 import os
+import time
 
 from random import randint
 from aereo import Aereo
@@ -11,12 +12,24 @@ from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_te
 pygame.init()
 
 WIDTH, HEIGHT = 500, 700
-WHITE = (255,0,0)
+WHITE = (255,255,255)
 BLACK = (0,0,0)
 VEL_SFONDO = 3
 FREQ_PROIETTILI = 0.15     # i proiettili possono venire sparati dopo 0.1 secondi dal proiettile precedente
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
 sound_laser = pygame.mixer.Sound("suoni\\laser-sound-1.mp3")
+sound_intro = pygame.mixer.Sound("suoni\\epic-sound.mp3")
+sound_menu = pygame.mixer.Sound("suoni\\drum-loop.mp3")
+sound_aereo = pygame.mixer.Sound("suoni\\sound-jet.mp3")
+font_air = pygame.font.SysFont("Copperplate Gothic", 50)
+surf_text_air = font_air.render("AIR", True, WHITE)
+font_battle = pygame.font.SysFont("Copperplate Gothic", 50)
+surf_text_battle = font_battle.render("BATTLE", True, WHITE)
+font_number = pygame.font.SysFont("Copperplate Gothic", 50)
+surf_text_number = font_number.render("2.0", True, WHITE)
+font_play = pygame.font.SysFont("Copperplate Gothic", 20)
+surf_text_play = font_play.render("PREMI UN TASTO PER CONTINUARE", True, WHITE)
+rect_nero = pygame.Rect(50, 400, surf_text_play.get_width(), surf_text_play.get_height())
 
 # aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 100, 100
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 480, 270
@@ -28,7 +41,37 @@ lista_nemici = []
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("AIR BATTLE")
+screen.fill(BLACK)
+sound_intro.play()
+time.sleep(1)
+screen.blit(surf_text_air, (90, 200))
+pygame.display.update()
+time.sleep(2)
+screen.blit(surf_text_battle, (200, 200))
+pygame.display.update()
+time.sleep(2)
+screen.blit(surf_text_number, (200, 250))
+pygame.display.update()
+time.sleep(2)
+screen.blit(surf_text_play, (50, 400))
+run = True
+pygame.display.update()
+while run:
+    sound_menu.play()
+    screen.blit(surf_text_air, (90, 200))
+    screen.blit(surf_text_battle, (200, 200))
+    screen.blit(surf_text_number, (200, 250))
+    time.sleep(1)
+    pygame.draw.rect(screen, BLACK, (rect_nero.x, rect_nero.y, rect_nero.width, rect_nero.height))
+    pygame.display.update()
+    time.sleep(1)
+    screen.blit(surf_text_play, (50, 400))
+    pygame.display.update()
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            run = False
 
+sound_menu.stop()
 jet_texture = carica_texture_spaceships()
 # jet_texture = carica_texture_jet()
 nemici_texture = carica_texture_nemici()
@@ -61,11 +104,15 @@ temporanea = 0
 ultimo_proiettile = 0
 explosion_point = []
 spazzatura = []
+font_punteggio = pygame.font.SysFont("Times New Roman", 20)
+font_punteggio_finale = pygame.font.SysFont("Times New Roman", 30)
+font_record = pygame.font.SysFont("Times New Roman", 30)
 
 while gameover == False:
     spara = False
     clock.tick(FPS)
     lasciato_ad = [False, False]
+    #sound_aereo.play(-1)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameover = True
@@ -131,8 +178,8 @@ while gameover == False:
         explosion_point.append([n, pygame.Vector2(n.centro.x-n.rect.width/2, n.centro.y-n.rect.height), 0])
         lista_nemici.remove(n)
     
-    
-                
+    surf_text_punteggio = font_punteggio.render(f"Punteggio: {punteggio[0]}", True, WHITE)
+    screen.blit(surf_text_punteggio, (0,0))      
     if conta >= HEIGHT:
         conta = 0
     else:
@@ -141,18 +188,28 @@ while gameover == False:
     tempo = contatore / 60
     pygame.display.update()
 
-punteggio_finale = punteggio[0]
-font = pygame.font.SysFont("Times New Roman", 50)
-surf_text = font.render(f"Punteggio: {punteggio_finale}", True, "red")
+surf_text_punteggio = font_punteggio_finale.render(f"Punteggio: {punteggio[0]}", True, WHITE)
+stringa = []
+with open('record.txt', 'r', encoding = 'utf-8') as f:
+    for riga in f:
+        stringa.append(riga)
 
-# sound_death.play()
-# for i in range(150):
-#     sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
-#     sfondo_gameover = pygame.transform.scale(sfondo_gameover, (500, 500))
-#     screen.fill(BLACK)
-#     screen.blit(sfondo_gameover, (-10, 100))
-#     screen.blit(surf_text, (0, 500))
-#     pygame.display.update()
+if int(stringa[0]) < punteggio[0]:
+    with open('record.txt', 'w', encoding = 'utf-8') as f:
+        f.write(str(punteggio[0]))
+    surf_text_record = font_record.render(f"Record: {punteggio[0]}", True, WHITE)
+else:
+    surf_text_record = font_record.render(f"Record: {stringa[0]}", True, WHITE)
+
+sound_death.play()
+for i in range(150):
+    sfondo_gameover = pygame.image.load("immagini\\youdied-sfondo.jpg")
+    sfondo_gameover = pygame.transform.scale(sfondo_gameover, (600, 600))
+    screen.fill(BLACK)
+    screen.blit(sfondo_gameover, (-60, 10))
+    screen.blit(surf_text_punteggio, (0, 500))
+    screen.blit(surf_text_record, (0, 550))
+    pygame.display.update()
 
 pygame.quit()
 
