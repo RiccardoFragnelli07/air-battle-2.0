@@ -12,10 +12,11 @@ IND = 0
 
 base_rect = pygame.Rect(150, 545, 100, 100)
 img_texture = carica_texture_spaceships()
-arr = [[base_rect.x + 12, base_rect.y + 9, 74, 67],
-       [base_rect.x + 11, base_rect.y + 14, 78, 40],
-       [base_rect.x + 12, base_rect.y + 9, 74, 67],
-       [base_rect.x + 21, base_rect.y + 12, 56, 69]]
+aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 120, 120
+arr = [[base_rect.x + 12*dim_aereo_x/100, base_rect.y + 9*dim_aereo_x/100, 74*dim_aereo_x/100, 67*dim_aereo_x/100],
+       [base_rect.x + 11*dim_aereo_x/100, base_rect.y + 14*dim_aereo_x/100, 78*dim_aereo_x/100, 40*dim_aereo_x/100],
+       [base_rect.x + 12*dim_aereo_x/100, base_rect.y + 9*dim_aereo_x/100, 74*dim_aereo_x/100, 67*dim_aereo_x/100],
+       [base_rect.x + 21*dim_aereo_x/100, base_rect.y + 12*dim_aereo_x/100, 56*dim_aereo_x/100, 69*dim_aereo_x/100]]
 
 class Aereo:
     def __init__(self, rect, img, img_effetti, screen, num, time = 0):
@@ -28,8 +29,8 @@ class Aereo:
         self.positivo = True
         self.num = num
         self.ind = 0
-        # self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
-        self.rectv = pygame.Rect(self.rect.x + 84.5, self.rect.y + 21.5, 70.5, 88.5)
+        self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
+        # self.rectv = pygame.Rect(self.rect.x + 84.5, self.rect.y + 21.5, 70.5, 88.5)
         
         # effetti_width = img_effetti.get_width() // 8
         # effetti_height = img_effetti.get_height()
@@ -43,14 +44,14 @@ class Aereo:
         # for i in range(len(self.jet)):
         #     self.jet[i] = pygame.transform.scale(self.jet[i], (120, 120))
         
-        self.jet = self.img
-        # jet_width = self.img.get_width() // 60
-        # jet_height = self.img.get_height()
-        # for i in range(60):
-        #     startx = i * jet_width
-        #     img_part = self.img.subsurface((startx, 0, jet_width, jet_height))
-        #     img_part = pygame.transform.scale(img_part, (100, 100))
-        #     self.jet.append(img_part)
+        self.jet = []
+        jet_width = self.img.get_width() // 60
+        jet_height = self.img.get_height()
+        for i in range(60):
+            startx = i * jet_width
+            img_part = self.img.subsurface((startx, 0, jet_width, jet_height))
+            img_part = pygame.transform.scale(img_part, (self.rect.width, self.rect.height))
+            self.jet.append(img_part)
         
 
             

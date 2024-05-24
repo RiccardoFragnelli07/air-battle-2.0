@@ -32,7 +32,7 @@ surf_text_play = font_play.render("PREMI UN TASTO PER CONTINUARE", True, WHITE)
 rect_nero = pygame.Rect(50, 400, surf_text_play.get_width(), surf_text_play.get_height())
 
 # aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 100, 100
-aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 480, 270
+aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 120, 120
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 60, 60
 dim_fuoco_x, dim_fuoco_y = 800, 100
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
@@ -56,6 +56,7 @@ time.sleep(2)
 screen.blit(surf_text_play, (50, 400))
 run = True
 pygame.display.update()
+
 while run:
     sound_menu.play()
     screen.blit(surf_text_air, (90, 200))
@@ -85,10 +86,10 @@ img_effetti = pygame.image.load("immagini\\EngineEffect.png")
 sfondo = pygame.transform.rotate(sfondo, 90)
 sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 img_effetti = pygame.transform.scale(img_effetti, (dim_fuoco_x, dim_fuoco_y))
-jet = 1
+jet = 0
 jedi_nave = carica_texture_jedi()
 # aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
-aereo = Aereo(aereo_rect, jedi_nave, img_effetti, screen, jet)
+aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
 
 lista_proiettili = []
 tempo = 0
@@ -119,6 +120,7 @@ while gameover == False:
             
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                sound_laser.play()
                 proiettile_rect = pygame.Rect(aereo.rectv.x + (aereo.rectv.width // 2) - 10, aereo.rect.y, dim_proiettile_x, dim_proiettile_y)
                 p = Proiettile(proiettile_rect, img_proiettile, screen)
                 lista_proiettili.append(p)

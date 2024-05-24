@@ -55,9 +55,11 @@ def collisione_pn(l1, l2, punteggio, temp):
     for i in range(len(l1)):
         for j in range(len(l2)):
             if l1[i].rect.colliderect(l2[j]):
-                proiettili_colpiti.append(l1[i])  
-                lista_colpiti.append(l2[j])
-                punteggio[0] += temp+100
+                l2[j].health -= 1
+                if l2[j].health <= 0:
+                    proiettili_colpiti.append(l1[i])  
+                    lista_colpiti.append(l2[j])
+                    punteggio[0] += temp+100
             
     return [proiettili_colpiti, lista_colpiti]
             
