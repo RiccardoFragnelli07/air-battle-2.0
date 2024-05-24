@@ -8,6 +8,7 @@ from aereo import Aereo
 from proiettile import Proiettile, draw_proiettili, move_proiettili, genera_proiettile
 from nemico import Nemico, move_nemico, draw_nemico
 from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_texture_jedi, collisione_pn, multiplo
+from explosion import Esplosione
 
 pygame.init()
 
@@ -76,7 +77,6 @@ sound_menu.stop()
 jet_texture = carica_texture_spaceships()
 # jet_texture = carica_texture_jet()
 nemici_texture = carica_texture_nemici()
-img_esplosione = pygame.image.load("immagini\\esplosioni.png")
 jedi = pygame.image.load("immagini\\jedi_spaceship\\jedi0.png")
 jedi = pygame.transform.scale(jedi, (480, 270))
 sfondo = pygame.image.load("immagini\\Background.jpg")
@@ -103,7 +103,7 @@ punteggio = [0]
 punteggio[0] = 0
 temporanea = 0
 ultimo_proiettile = 0
-explosion_point = []
+lista_esplosioni = []
 spazzatura = []
 font_punteggio = pygame.font.SysFont("Times New Roman", 20)
 font_punteggio_finale = pygame.font.SysFont("Times New Roman", 30)
@@ -136,7 +136,7 @@ while gameover == False:
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 
     if tempo != 0 and int(tempo) % 1 == 0 and int(tempo) == (contatore / 60):
-        q = Nemico(tempo, nemici_texture, img_esplosione)
+        q = Nemico(tempo, nemici_texture)
         lista_nemici.append(q)
         
     # if key_pressed[pygame.K_SPACE] and tempo - ultimo_proiettile >= FREQ_PROIETTILI:
@@ -152,6 +152,8 @@ while gameover == False:
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
     draw_nemico(lista_nemici, screen)
+    for esp in lista_esplosioni:
+        esp.draw(screen)
     
     # for i in range(len(explosion_point)):
     #     explosion_point[i][0].esplodi(screen, explosion_point[i][1], explosion_point[i][2])
@@ -177,10 +179,11 @@ while gameover == False:
     for p in proiettili_colpiti:
         lista_proiettili.remove(p)
     for n in nemici_colpiti:
-        explosion_point.append([n, pygame.Vector2(n.centro.x-n.rect.width/2, n.centro.y-n.rect.height), 0])
+        e = Esplosione(n.rect.x + n.rect.width/2, n.rect.y + n.rect.height/2, 0)
+        lista_esplosioni.append(e)
         lista_nemici.remove(n)
     
-    surf_text_punteggio = font_punteggio.render(f"Punteggio: {punteggio[0]}", True, WHITE)
+    surf_text_punteggio = font_punteggio.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
     screen.blit(surf_text_punteggio, (0,0))      
     if conta >= HEIGHT:
         conta = 0
@@ -190,7 +193,7 @@ while gameover == False:
     tempo = contatore / 60
     pygame.display.update()
 
-surf_text_punteggio = font_punteggio_finale.render(f"Punteggio: {punteggio[0]}", True, WHITE)
+surf_text_punteggio = font_punteggio_finale.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
 stringa = []
 with open('record.txt', 'r', encoding = 'utf-8') as f:
     for riga in f:
