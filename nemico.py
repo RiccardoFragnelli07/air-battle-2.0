@@ -36,8 +36,11 @@ rectv = [[22, nemico1_y, dim_nemico1_x - 55, dim_nemico1_y],
         [0, nemico8_y, dim_nemico8_x, dim_nemico8_y]]
 
 
+health = [2, 2, 3, 4, 4, 6, 6]
+
+
 class Nemico:
-    def __init__(self, time, texture):
+    def __init__(self, time, texture, esplosione_img):
         self.time = time
         num = genera_navicella(self.time)   
         self.rect = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
@@ -47,6 +50,18 @@ class Nemico:
         self.rect.x = randint(0, WIDTH - self.rect.width)
         self.rectv.x = self.rect.x + rectv[num][0]
         self.arrivo = randint(0, WIDTH - self.rect.width)
+        self.health = health[num]
+        self.esplosione_img = esplosione_img
+        self.esplosioni = []
+        esp_width = esplosione_img.get_width() // 6
+        esp_height = esplosione_img.get_height()
+        for i in range(6):
+            startx = i * esp_width
+            img_part = esplosione_img.subsurface((startx, 0, esp_width, esp_height))
+            img_part = pygame.transform.scale(img_part, (200, 200))
+            self.esplosioni.append(img_part)
+        
+        self.centro = pygame.math.Vector2(self.rectv.x + (self.rectv.width // 2), self.rectv.y + (self.rectv.height // 2))
         # self.rect.x = WIDTH
         # self.rectv.x = self.rect.x + rectv[num][0]
         
@@ -64,7 +79,12 @@ class Nemico:
             self.alfa = math.radians(90)
         if cat2 < 0:
             self.velx *= -1
-
+        
+    def esplodi(self, screen, point, indice):
+        self.centro = pygame.math.Vector2(self.rectv.x + (self.rectv.width // 2), self.rectv.y + (self.rectv.height // 2))
+        screen.blit(self.esplosioni[int(indice)], (point.x, point.y))
+                
+        
 
 def move_nemico(lista):
     temp = []

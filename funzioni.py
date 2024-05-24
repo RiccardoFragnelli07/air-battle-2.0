@@ -50,13 +50,16 @@ def genera_navicella(time):
     return navicella
 
 def collisione_pn(l1, l2, punteggio, temp):
+    lista_colpiti = []
+    proiettili_colpiti = []
     for i in range(len(l1)):
         for j in range(len(l2)):
             if l1[i].rect.colliderect(l2[j]):
-                l1.pop(i)
-                l2.pop(j)
+                proiettili_colpiti.append(l1[i])  
+                lista_colpiti.append(l2[j])
                 punteggio[0] += temp+100
-                return 0
+            
+    return [proiettili_colpiti, lista_colpiti]
             
 def multiplo(tempo, num):
     a = tempo / num
@@ -105,3 +108,4 @@ def carica_texture_jedi():
     for a in immagini:
         immagini2.append(pygame.transform.scale(a, (480/2, 270/2)))
     return immagini2[::-1]
+

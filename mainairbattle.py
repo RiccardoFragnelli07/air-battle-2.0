@@ -1,6 +1,7 @@
 import pygame
 import math
 import os
+
 from random import randint
 from aereo import Aereo
 from proiettile import Proiettile, draw_proiettili, move_proiettili, genera_proiettile
@@ -31,7 +32,7 @@ pygame.display.set_caption("AIR BATTLE")
 jet_texture = carica_texture_spaceships()
 # jet_texture = carica_texture_jet()
 nemici_texture = carica_texture_nemici()
-
+img_esplosione = pygame.image.load("immagini\\esplosioni.png")
 jedi = pygame.image.load("immagini\\jedi_spaceship\\jedi0.png")
 jedi = pygame.transform.scale(jedi, (480, 270))
 sfondo = pygame.image.load("immagini\\Background.jpg")
@@ -58,6 +59,8 @@ punteggio = [0]
 punteggio[0] = 0
 temporanea = 0
 ultimo_proiettile = 0
+explosion_point = []
+spazzatura = []
 
 while gameover == False:
     spara = False
@@ -84,7 +87,7 @@ while gameover == False:
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 
     if tempo != 0 and int(tempo) % 1 == 0 and int(tempo) == (contatore / 60):
-        q = Nemico(tempo, nemici_texture)
+        q = Nemico(tempo, nemici_texture, img_esplosione)
         lista_nemici.append(q)
         
     # if key_pressed[pygame.K_SPACE] and tempo - ultimo_proiettile >= FREQ_PROIETTILI:
@@ -100,6 +103,17 @@ while gameover == False:
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
     draw_nemico(lista_nemici, screen)
+    
+    # for i in range(len(explosion_point)):
+    #     explosion_point[i][0].esplodi(screen, explosion_point[i][1], explosion_point[i][2])
+    #     explosion_point[i][2] += 1
+    #     if explosion_point[i][2] > 5:
+    #         spazzatura.append(i)
+    # for i in range(len(spazzatura)):
+    #     if explosion_point[i] != 0:
+    #         explosion_point.pop(spazzatura[i])
+    #         spazzatura[i] = 0 
+        
     aereo.draw(screen) 
     draw_proiettili(lista_proiettili, screen)
     
@@ -108,8 +122,16 @@ while gameover == False:
             gameover = True
     
     # ho dovuto fare questa roba con la funzione pk se no dava l'errore out of range
-    while collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea) == 0:
-        pass
+    tmp = collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea)
+    proiettili_colpiti = tmp[0]
+    nemici_colpiti = tmp[1]
+    for p in proiettili_colpiti:
+        lista_proiettili.remove(p)
+    for n in nemici_colpiti:
+        explosion_point.append([n, pygame.Vector2(n.centro.x-n.rect.width/2, n.centro.y-n.rect.height), 0])
+        lista_nemici.remove(n)
+    
+    
                 
     if conta >= HEIGHT:
         conta = 0
