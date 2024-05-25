@@ -4,6 +4,8 @@ HEIGHT = 700
 WIDTH = 500
 VEL = 10
 
+proiettile_x, proiettile_y = 40, 65
+
 class Proiettile:
     def __init__(self, rect, img, screen):
         self.rect = rect
@@ -11,7 +13,7 @@ class Proiettile:
         self.screen = screen
         self.proiettili = []
         self.check = False
-        self.img = pygame.transform.scale(self.img, (30, 50))
+        self.img = pygame.transform.scale(self.img, (proiettile_x, proiettile_y))
         
         
 def genera_proiettile(lista, key, time):

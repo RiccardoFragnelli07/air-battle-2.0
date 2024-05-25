@@ -8,15 +8,15 @@ def carica_texture_spaceships():
     immagini.append([])
     immagini.append([])
 
-    immagini[0].append(pygame.image.load("immagini\\SF01.png"))
-    immagini[0].append(pygame.image.load("immagini\\SF02.png"))
-    immagini[0].append(pygame.image.load("immagini\\SF03.png"))
-    immagini[0].append(pygame.image.load("immagini\\SF04.png"))
+    immagini[0].append(pygame.image.load("immagini\\white_spaceship_images\\SF01.png"))
+    immagini[0].append(pygame.image.load("immagini\\white_spaceship_images\\SF02.png"))
+    immagini[0].append(pygame.image.load("immagini\\white_spaceship_images\\SF03.png"))
+    immagini[0].append(pygame.image.load("immagini\\white_spaceship_images\\SF04.png"))
 
-    immagini[1].append(pygame.image.load("immagini\\SF01a_strip60.png"))
-    immagini[1].append(pygame.image.load("immagini\\SF02a_strip60.png"))
-    immagini[1].append(pygame.image.load("immagini\\SF03a_strip60.png"))
-    immagini[1].append(pygame.image.load("immagini\\SF04a_strip60.png"))
+    immagini[1].append(pygame.image.load("immagini\\white_spaceship_images\\SF01a_strip60.png"))
+    immagini[1].append(pygame.image.load("immagini\\white_spaceship_images\\SF02a_strip60.png"))
+    immagini[1].append(pygame.image.load("immagini\\white_spaceship_images\\SF03a_strip60.png"))
+    immagini[1].append(pygame.image.load("immagini\\white_spaceship_images\\SF04a_strip60.png"))
     
     return immagini
 
@@ -24,14 +24,14 @@ def carica_texture_spaceships():
     
 def carica_texture_nemici(immagini = []):
     immagini = []
-    immagini.append(pygame.image.load("immagini\\Alien-Scout.png"))
-    immagini.append(pygame.image.load("immagini\\Alien-Bomber.png"))
-    immagini.append(pygame.image.load("immagini\\Alien-Frigate.png"))
-    immagini.append(pygame.image.load("immagini\\Alien-Cruiser.png"))
-    immagini.append(pygame.image.load("immagini\\Alien-Heavycruiser.png"))
-    immagini.append(pygame.image.load("immagini\\Alien-Battleship.png"))
-    immagini.append(pygame.image.load("immagini\\Alien-Mothership.png"))
-    immagini.append(pygame.image.load("immagini\\Alien-Spacestation.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Scout.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Bomber.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Frigate.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Cruiser.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Heavycruiser.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Battleship.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Mothership.png"))
+    immagini.append(pygame.image.load("immagini\\nemici_images\\Alien-Spacestation.png"))
     return immagini
 
 def genera_navicella(time):
@@ -55,27 +55,24 @@ def collisione_pn(l1, l2, punteggio, temp, nemici_texture):
     for i in range(len(l1)):
         for j in range(len(l2)):
             if l1[i].rect.colliderect(l2[j]):
-                l2[j].health -= 1
-                if l2[j].health <= 0:
-                    proiettili_colpiti.append(l1[i])  
-                    lista_colpiti.append(l2[j])
-                    if l2[j].tipo_img == 0:
-                        punteggio[0] += temp+50
-                    elif l2[j].tipo_img == 1:
-                        punteggio[0] += temp+100
-                    elif l2[j].tipo_img == 2:
-                        punteggio[0] += temp+150
-                    elif l2[j].tipo_img == 3:
-                        punteggio[0] += temp+200
-                    elif l2[j].tipo_img == 4:
-                        punteggio[0] += temp+250
-                    elif l2[j].tipo_img == 5:
-                        punteggio[0] += temp+300
-                    elif l2[j].tipo_img == 6:
-                        punteggio[0] += temp+350
-                    elif l2[j].tipo_img == 7:
-                        punteggio[0] += temp+400
-            
+                proiettili_colpiti.append(l1[i])  
+                lista_colpiti.append(l2[j])
+                if l2[j].tipo_img == 0:
+                    punteggio[0] += temp+50
+                elif l2[j].tipo_img == 1:
+                    punteggio[0] += temp+100
+                elif l2[j].tipo_img == 2:
+                    punteggio[0] += temp+150
+                elif l2[j].tipo_img == 3:
+                    punteggio[0] += temp+200
+                elif l2[j].tipo_img == 4:
+                    punteggio[0] += temp+250
+                elif l2[j].tipo_img == 5:
+                    punteggio[0] += temp+300
+                elif l2[j].tipo_img == 6:
+                    punteggio[0] += temp+350
+                elif l2[j].tipo_img == 7:
+                    punteggio[0] += temp+400
     return [proiettili_colpiti, lista_colpiti]
             
 def multiplo(tempo, num):

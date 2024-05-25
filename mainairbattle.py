@@ -34,7 +34,7 @@ rect_nero = pygame.Rect(50, 400, surf_text_play.get_width(), surf_text_play.get_
 
 # aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 100, 100
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 120, 120
-proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 60, 60
+proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 45, 60
 dim_fuoco_x, dim_fuoco_y = 800, 100
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
 jetNemico_y, dim_jetNemico_x, dim_jetNemico_y = 0, 50, 50
@@ -70,7 +70,7 @@ while run:
     screen.blit(surf_text_play, (50, 400))
     pygame.display.update()
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
             run = False
 
 sound_menu.stop()
@@ -118,8 +118,8 @@ while gameover == False:
         if event.type == pygame.QUIT:
             gameover = True
             
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == pygame.BUTTON_LEFT:
                 sound_laser.play()
                 proiettile_rect = pygame.Rect(aereo.rectv.x + (aereo.rectv.width // 2) - 10, aereo.rect.y, dim_proiettile_x, dim_proiettile_y)
                 p = Proiettile(proiettile_rect, img_proiettile, screen)
@@ -138,7 +138,7 @@ while gameover == False:
     if tempo != 0 and int(tempo) % 1 == 0 and int(tempo) == (contatore / 60):
         q = Nemico(tempo, nemici_texture)
         lista_nemici.append(q)
-        
+    
     # if key_pressed[pygame.K_SPACE] and tempo - ultimo_proiettile >= FREQ_PROIETTILI:
     #     sound_laser.play()
     #     proiettile_rect = pygame.Rect(aereo.rect.x + (aereo_rect.width // 2) - 10, aereo_rect.y, dim_proiettile_x, dim_proiettile_y)
@@ -172,16 +172,18 @@ while gameover == False:
         if aereo.rectv.colliderect(nemico.rectv):
             gameover = True
     
-    # ho dovuto fare questa roba con la funzione pk se no dava l'errore out of range
     tmp = collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea, nemici_texture)
     proiettili_colpiti = tmp[0]
     nemici_colpiti = tmp[1]
     for p in proiettili_colpiti:
         lista_proiettili.remove(p)
     for n in nemici_colpiti:
-        e = Esplosione(n.rect.x + n.rect.width/2, n.rect.y + n.rect.height/2, 0)
-        lista_esplosioni.append(e)
-        lista_nemici.remove(n)
+        n.health -= 1
+        # print(n.health)
+        if n.health <= 0:
+            e = Esplosione(n.rect.x + n.rect.width/2, n.rect.y + n.rect.height/2, 0)
+            lista_esplosioni.append(e)
+            lista_nemici.remove(n)
     
     surf_text_punteggio = font_punteggio.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
     screen.blit(surf_text_punteggio, (0,0))      

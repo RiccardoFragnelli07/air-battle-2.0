@@ -4,7 +4,7 @@ from funzioni import carica_texture_spaceships, distanza_punti, carica_texture_j
 
 VEL = 7
 ROTAZIONE = 0.6
-MAX_ROTAZIONE = 10
+MAX_ROTAZIONE = 12
 DEROTAZIONE = 1.2
 HEIGHT = 690
 WIDTH = 500

@@ -36,7 +36,7 @@ rectv = [[22, nemico1_y, dim_nemico1_x - 55, dim_nemico1_y],
         [0, nemico8_y, dim_nemico8_x, dim_nemico8_y]]
 
 
-health = [2, 2, 3, 4, 4, 6, 6]
+health = [1, 1, 2, 3, 4, 6, 6]
 
 
 class Nemico:

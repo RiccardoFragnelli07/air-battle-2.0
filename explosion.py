@@ -3,11 +3,11 @@ import os
 
 EXPLOSION_SPEED = 1
 
-espl = pygame.image.load("immagini\\animazioni_esplosione.png") 
+espl = pygame.image.load("immagini\\animazioni_esplosione1.png") 
 coll = pygame.image.load("immagini\\animazioni_collisione.png")
-nespx = 8
-nespy = 6
-nscala = 4
+nespx = 5
+nespy = 5
+nscala = 2
 
 class Esplosione:
     def __init__(self, x, y, type):
