@@ -47,6 +47,7 @@ class Nemico:
         self.rectv = pygame.Rect(rectv[num][0], rectv[num][1], rectv[num][2], rectv[num][3])
         self.img = texture[num]
         self.img = pygame.transform.scale(self.img, (self.rect.width, self.rect.height))
+        self.tipo_img = num
         self.rect.x = randint(0, WIDTH - self.rect.width)
         self.rectv.x = self.rect.x + rectv[num][0]
         self.arrivo = randint(0, WIDTH - self.rect.width)

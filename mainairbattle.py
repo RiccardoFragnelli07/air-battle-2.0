@@ -173,7 +173,7 @@ while gameover == False:
             gameover = True
     
     # ho dovuto fare questa roba con la funzione pk se no dava l'errore out of range
-    tmp = collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea)
+    tmp = collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea, nemici_texture)
     proiettili_colpiti = tmp[0]
     nemici_colpiti = tmp[1]
     for p in proiettili_colpiti:
@@ -202,7 +202,7 @@ with open('record.txt', 'r', encoding = 'utf-8') as f:
 if int(stringa[0]) < punteggio[0]:
     with open('record.txt', 'w', encoding = 'utf-8') as f:
         f.write(str(punteggio[0]))
-    surf_text_record = font_record.render(f"Record: {punteggio[0]}", True, WHITE)
+    surf_text_record = font_record.render(f"NEW RECORD: {punteggio[0]}", True, WHITE)
 else:
     surf_text_record = font_record.render(f"Record: {stringa[0]}", True, WHITE)
 

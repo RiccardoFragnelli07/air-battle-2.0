@@ -23,7 +23,6 @@ class Esplosione:
                 for j in range(nespx):
                     startx = j * self.rect.width
                     starty = i * self.rect.height
-                    print(startx, starty)
                     img_part = self.img.subsurface((startx, starty, self.rect.width, self.rect.height))
                     img_part = pygame.transform.scale(img_part, (self.rect.width/nscala, self.rect.height/nscala))
                     self.parts.append(img_part)

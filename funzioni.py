@@ -49,7 +49,7 @@ def genera_navicella(time):
             navicella = randint(4, 5)
     return navicella
 
-def collisione_pn(l1, l2, punteggio, temp):
+def collisione_pn(l1, l2, punteggio, temp, nemici_texture):
     lista_colpiti = []
     proiettili_colpiti = []
     for i in range(len(l1)):
@@ -59,7 +59,22 @@ def collisione_pn(l1, l2, punteggio, temp):
                 if l2[j].health <= 0:
                     proiettili_colpiti.append(l1[i])  
                     lista_colpiti.append(l2[j])
-                    punteggio[0] += temp+100
+                    if l2[j].tipo_img == 0:
+                        punteggio[0] += temp+50
+                    elif l2[j].tipo_img == 1:
+                        punteggio[0] += temp+100
+                    elif l2[j].tipo_img == 2:
+                        punteggio[0] += temp+150
+                    elif l2[j].tipo_img == 3:
+                        punteggio[0] += temp+200
+                    elif l2[j].tipo_img == 4:
+                        punteggio[0] += temp+250
+                    elif l2[j].tipo_img == 5:
+                        punteggio[0] += temp+300
+                    elif l2[j].tipo_img == 6:
+                        punteggio[0] += temp+350
+                    elif l2[j].tipo_img == 7:
+                        punteggio[0] += temp+400
             
     return [proiettili_colpiti, lista_colpiti]
             
