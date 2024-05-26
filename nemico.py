@@ -53,7 +53,6 @@ class Nemico:
         self.arrivo = randint(0, WIDTH - self.rect.width)
         self.health = health[num]
         self.esplosioni = []
-        self.centro = pygame.math.Vector2(self.rectv.x + (self.rectv.width // 2), self.rectv.y + (self.rectv.height // 2))
         # self.rect.x = WIDTH
         # self.rectv.x = self.rect.x + rectv[num][0]
         
@@ -61,7 +60,7 @@ class Nemico:
         
         cat2 = self.arrivo - self.rect.x
         if cat2 != 0:
-            alfa = math.atan(abs(HEIGHT / cat2))
+            alfa = math.atan(abs((HEIGHT - self.rect.height) / cat2))
             self.velx = VEL * math.cos(alfa)
             self.vely = VEL * math.sin(alfa)
             self.alfa = alfa
@@ -86,7 +85,7 @@ def move_nemico(lista):
     for nemico in lista:
         if nemico.rect.y <= HEIGHT:
             temp.append(nemico)
-
+    
     return temp
 
 def draw_nemico(lista, screen):

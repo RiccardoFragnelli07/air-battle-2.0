@@ -9,6 +9,10 @@ DEROTAZIONE = 1.2
 HEIGHT = 690
 WIDTH = 500
 IND = 0
+TOT_VITE = 3
+
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 
 base_rect = pygame.Rect(150, 545, 100, 100)
 img_texture = carica_texture_spaceships()
@@ -30,6 +34,8 @@ class Aereo:
         self.num = num
         self.ind = 0
         self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
+        self.vita = TOT_VITE
+        
         # self.rectv = pygame.Rect(self.rect.x + 84.5, self.rect.y + 21.5, 70.5, 88.5)
         
         # effetti_width = img_effetti.get_width() // 8
@@ -104,3 +110,14 @@ class Aereo:
         screen.blit(self.jet[int(self.ind)], (self.rect.x, self.rect.y))
         # screen.blit(self.effetti[int(self.time) % 8], (self.rect.x, self.rect.y + 2))
         self.time += 0.2
+        
+    def draw_lifebar(self, screen):
+        dimx, dimy = 40, 8
+        rosso_rect = pygame.Rect(0, 0, dimx, dimy)
+        rosso_rect.x = WIDTH - rosso_rect.width - 20
+        rosso_rect.y = HEIGHT - rosso_rect.height - 20
+        percentuale = self.vita / TOT_VITE * 100
+        verde_rect = pygame.Rect(rosso_rect.x, rosso_rect.y, dimx * percentuale / 100, dimy)
+        pygame.draw.rect(screen, RED, rosso_rect)
+        pygame.draw.rect(screen, GREEN, verde_rect)
+        

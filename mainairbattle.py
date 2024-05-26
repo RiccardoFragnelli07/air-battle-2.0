@@ -42,38 +42,38 @@ lista_nemici = []
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("AIR BATTLE")
-screen.fill(BLACK)
-sound_intro.play()
-time.sleep(1)
-screen.blit(surf_text_air, (90, 200))
-pygame.display.update()
-time.sleep(2)
-screen.blit(surf_text_battle, (200, 200))
-pygame.display.update()
-time.sleep(2)
-screen.blit(surf_text_number, (200, 250))
-pygame.display.update()
-time.sleep(2)
-screen.blit(surf_text_play, (50, 400))
-run = True
-pygame.display.update()
+# screen.fill(BLACK)
+# sound_intro.play()
+# time.sleep(1)
+# screen.blit(surf_text_air, (90, 200))
+# pygame.display.update()
+# time.sleep(2)
+# screen.blit(surf_text_battle, (200, 200))
+# pygame.display.update()
+# time.sleep(2)
+# screen.blit(surf_text_number, (200, 250))
+# pygame.display.update()
+# time.sleep(2)
+# screen.blit(surf_text_play, (50, 400))
+# run = True
+# pygame.display.update()
 
-while run:
-    sound_menu.play()
-    screen.blit(surf_text_air, (90, 200))
-    screen.blit(surf_text_battle, (200, 200))
-    screen.blit(surf_text_number, (200, 250))
-    time.sleep(1)
-    pygame.draw.rect(screen, BLACK, (rect_nero.x, rect_nero.y, rect_nero.width, rect_nero.height))
-    pygame.display.update()
-    time.sleep(1)
-    screen.blit(surf_text_play, (50, 400))
-    pygame.display.update()
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-            run = False
+# while run:
+#     sound_menu.play()
+#     screen.blit(surf_text_air, (90, 200))
+#     screen.blit(surf_text_battle, (200, 200))
+#     screen.blit(surf_text_number, (200, 250))
+#     time.sleep(1)
+#     pygame.draw.rect(screen, BLACK, (rect_nero.x, rect_nero.y, rect_nero.width, rect_nero.height))
+#     pygame.display.update()
+#     time.sleep(1)
+#     screen.blit(surf_text_play, (50, 400))
+#     pygame.display.update()
+#     for event in pygame.event.get():
+#         if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+#             run = False
 
-sound_menu.stop()
+# sound_menu.stop()
 jet_texture = carica_texture_spaceships()
 # jet_texture = carica_texture_jet()
 nemici_texture = carica_texture_nemici()
@@ -103,6 +103,7 @@ punteggio = [0]
 punteggio[0] = 0
 temporanea = 0
 ultimo_proiettile = 0
+t_invulnerabilita = 0
 lista_esplosioni = []
 spazzatura = []
 font_punteggio = pygame.font.SysFont("Times New Roman", 20)
@@ -151,6 +152,7 @@ while gameover == False:
     lista_proiettili = move_proiettili(lista_proiettili)
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
+    aereo.draw_lifebar(screen)
     draw_nemico(lista_nemici, screen)
     for esp in lista_esplosioni:
         esp.draw(screen)
@@ -169,8 +171,11 @@ while gameover == False:
     draw_proiettili(lista_proiettili, screen)
     
     for nemico in lista_nemici:
-        if aereo.rectv.colliderect(nemico.rectv):
-            gameover = True
+        if aereo.rectv.colliderect(nemico.rectv) and tempo - t_invulnerabilita > 1:
+            aereo.vita = 0
+            t_invulnerabilita = tempo
+    if aereo.vita <= 0 :
+        gameover = True
     
     tmp = collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea, nemici_texture)
     proiettili_colpiti = tmp[0]
