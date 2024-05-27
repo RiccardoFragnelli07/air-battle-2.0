@@ -123,3 +123,20 @@ def carica_texture_jedi():
         immagini2.append(pygame.transform.scale(a, (480/2, 270/2)))
     return immagini2[::-1]
 
+
+
+def genera_proiettili(n, distanza, aereo_rect, proiettile_rect):
+    x1, y1 = aereo_rect.left, aereo_rect.top  
+    center_x = x1 + aereo_rect.width / 2  
+
+    width_tot = (n - 1) * distanza
+    var = center_x - width_tot / 2
+
+    punti = []
+
+    for i in range(n):
+        x = var + i * distanza  
+        y = y1 - proiettile_rect.height  
+        punti.append([x, y])  
+
+    return punti

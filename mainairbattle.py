@@ -5,9 +5,9 @@ import time
 
 from random import randint
 from aereo import Aereo
-from proiettile import Proiettile, draw_proiettili, move_proiettili, genera_proiettile
+from proiettile import Proiettile, draw_proiettili, move_proiettili
 from nemico import Nemico, move_nemico, draw_nemico
-from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_texture_jedi, collisione_pn, multiplo
+from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_texture_jedi, collisione_pn, multiplo, genera_proiettili
 from explosion import Esplosione
 
 pygame.init()
@@ -123,7 +123,7 @@ while gameover == False:
             if event.button == pygame.BUTTON_LEFT:
                 sound_laser.play()
                 proiettile_rect = pygame.Rect(aereo.rectv.x + (aereo.rectv.width // 2) - 10, aereo.rect.y, dim_proiettile_x, dim_proiettile_y)
-                p = Proiettile(proiettile_rect, img_proiettile, screen)
+                p = Proiettile(proiettile_rect, img_proiettile, 1, aereo.rect, screen)
                 lista_proiettili.append(p)
                 
         if event.type == pygame.KEYUP:
@@ -149,7 +149,10 @@ while gameover == False:
 
     lista_nemici = move_nemico(lista_nemici)
     aereo.move(key_pressed, lista_proiettili, lasciato_ad, mouse_pos)
+
     lista_proiettili = move_proiettili(lista_proiettili)
+    for i in range(len(lista_proiettili)):
+        print(lista_proiettili[i].proiettili)
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
     aereo.draw_lifebar(screen)

@@ -35,6 +35,7 @@ class Aereo:
         self.ind = 0
         self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
         self.vita = TOT_VITE
+        self.proiettili = 1
         
         # self.rectv = pygame.Rect(self.rect.x + 84.5, self.rect.y + 21.5, 70.5, 88.5)
         
