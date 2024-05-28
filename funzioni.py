@@ -125,7 +125,7 @@ def carica_texture_jedi():
 
 
 
-def genera_proiettili(n, distanza, aereo_rect, proiettile_rect):
+def genera_proiettili(n, distanza, aereo_rect, proiettile_width, proiettile_height):
     x1, y1 = aereo_rect.left, aereo_rect.top  
     center_x = x1 + aereo_rect.width / 2  
 
@@ -135,8 +135,17 @@ def genera_proiettili(n, distanza, aereo_rect, proiettile_rect):
     punti = []
 
     for i in range(n):
-        x = var + i * distanza  
-        y = y1 - proiettile_rect.height  
+        x = var + i * distanza - proiettile_width / 2
+        y = y1 - proiettile_height  
         punti.append([x, y])  
 
     return punti
+
+def frequenze_lista(lista):
+    frequenze = {}
+    for elemento in lista:
+        if elemento in frequenze:
+            frequenze[elemento] += 1
+        else:
+            frequenze[elemento] = 1
+    return frequenze
