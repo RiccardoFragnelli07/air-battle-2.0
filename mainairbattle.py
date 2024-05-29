@@ -32,6 +32,20 @@ surf_text_number = font_number.render("2.0", True, WHITE)
 font_play = pygame.font.SysFont("Copperplate Gothic", 20)
 surf_text_play = font_play.render("PREMI UN TASTO PER CONTINUARE", True, WHITE)
 rect_nero = pygame.Rect(50, 400, surf_text_play.get_width(), surf_text_play.get_height())
+rect_pausa_grande = pygame.Rect(450, 10, 30, 30)
+rect_pausa_piccolo1 = pygame.Rect(rect_pausa_grande.x+(rect_pausa_grande.width//2)-9, rect_pausa_grande.y+5, 3, 20)
+rect_pausa_piccolo2 = pygame.Rect(rect_pausa_grande.x+(rect_pausa_grande.width//2)+7, rect_pausa_grande.y+5, 3, 20)
+rect_exit = pygame.Rect(WIDTH//2-150, HEIGHT//2-50, 300, 100)
+font_exit = pygame.font.SysFont("Copperplate Gothic", 50)
+surf_text_exit = font_exit.render("EXIT", True, WHITE)
+font_allert = pygame.font.SysFont("Copperplate Gothic", 30)
+surf_text_allert = font_allert.render("SEI SICURO DI VOLER USCIRE", True, WHITE)
+font_yes = pygame.font.SysFont("Copperplate Gothic", 50)
+surf_text_yes = font_yes.render("SI", True, WHITE)
+rect_yes = pygame.Rect(WIDTH//2-100, (HEIGHT//2)+58, 48, 37)
+font_no = pygame.font.SysFont("Copperplate Gothic", 50)
+surf_text_no = font_no.render("NO", True, WHITE)
+rect_no = pygame.Rect((WIDTH//2)+5, (HEIGHT//2)+60, 80, 35)
 
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 120, 120
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 45, 60
@@ -112,6 +126,8 @@ font_punteggio_finale = pygame.font.SysFont("Times New Roman", 30)
 font_record = pygame.font.SysFont("Times New Roman", 30)
 
 while gameover == False:
+    run1 = True
+    run2 = True
     spara = False
     clock.tick(FPS)
     lasciato_ad = [False, False]
@@ -180,6 +196,50 @@ while gameover == False:
                 lista_nemici.remove(key)
     
     surf_text_punteggio = font_punteggio.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
+    pygame.draw.rect(screen, WHITE, rect_pausa_grande, 2)
+    pygame.draw.rect(screen, WHITE, rect_pausa_piccolo1)
+    pygame.draw.rect(screen, WHITE, rect_pausa_piccolo2)
+
+    mouse_pos_2 = pygame.mouse.get_pos()
+    mouse_pressed = pygame.mouse.get_pressed()
+
+    if mouse_pressed[2] == True and rect_pausa_grande.collidepoint(mouse_pos_2):
+        while run1:
+            pygame.draw.rect(screen, WHITE, rect_exit, 2)
+            screen.blit(surf_text_exit, (rect_exit.x+(rect_exit.width//2)-48, rect_exit.y+(rect_exit.height//2)-30))
+            mouse_pos_2 = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+            if mouse_pressed[0] == True and rect_exit.collidepoint(mouse_pos_2):
+                while run2:
+                    screen.fill(BLACK)
+                    screen.blit(surf_text_allert, (WIDTH//2-240, HEIGHT//2))
+                    screen.blit(surf_text_yes, (WIDTH//2-100, (HEIGHT//2)+50))
+                    screen.blit(surf_text_no, ((WIDTH//2), (HEIGHT//2)+50))
+                    mouse_pos_2 = pygame.mouse.get_pos()
+                    mouse_pressed = pygame.mouse.get_pressed()
+                    if mouse_pressed[2] == True and rect_yes.collidepoint(mouse_pos_2):
+                        run2 = False
+                        run1 = False
+                        gameover = True
+                    if mouse_pressed[2] == True and rect_no.collidepoint(mouse_pos_2):
+                        run2 = False
+                        run1 = False
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            run2 = False
+                            run1 = False
+                            gameover = True
+                    
+                    pygame.display.update()
+            if mouse_pressed[0] == True and rect_pausa_grande.collidepoint(mouse_pos_2):
+                run1 = False
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run1 = False
+                    gameover = True
+            
+            pygame.display.update()
+    
     screen.blit(surf_text_punteggio, (0,0))      
     if conta >= HEIGHT:
         conta = 0
@@ -187,6 +247,8 @@ while gameover == False:
         conta += VEL_SFONDO
     contatore += 1
     tempo = contatore / 60
+
+
     pygame.display.update()
 
 surf_text_punteggio = font_punteggio_finale.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
