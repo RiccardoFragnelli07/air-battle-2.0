@@ -7,8 +7,9 @@ from random import randint
 from aereo import Aereo
 from proiettile import Proiettile, draw_proiettili, move_proiettili
 from nemico import Nemico, move_nemico, draw_nemico
-from funzioni import carica_texture_spaceships, carica_texture_nemici, carica_texture_jedi
-from funzioni import collisione_pn, multiplo, genera_proiettili, frequenze_lista
+from funzioni import carica_texture_spaceships, carica_texture_nemici, calculate_speeds, genera_rettangoli_casuali
+from funzioni import collisione_pn, crea_posizioni, frequenze_lista, genera_proiettili, generate_rectangles_on_edges
+from funzioni import generate_pentagon_rectangles
 from explosion import Esplosione
 
 pygame.init()
@@ -47,7 +48,7 @@ font_no = pygame.font.SysFont("Copperplate Gothic", 50)
 surf_text_no = font_no.render("NO", True, WHITE)
 rect_no = pygame.Rect((WIDTH//2)+5, (HEIGHT//2)+60, 80, 35)
 
-aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 120, 120
+aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 110, 110
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 45, 60
 dim_fuoco_x, dim_fuoco_y = 800, 100
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
@@ -58,37 +59,39 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("AIR BATTLE")
 
 
-screen.fill(BLACK)
-sound_intro.play()
-time.sleep(1)
-screen.blit(surf_text_air, (90, 200))
-pygame.display.update()
-time.sleep(2)
-screen.blit(surf_text_battle, (200, 200))
-pygame.display.update()
-time.sleep(2)
-screen.blit(surf_text_number, (200, 250))
-pygame.display.update()
-time.sleep(2)
-screen.blit(surf_text_play, (50, 400))
-run = True
-pygame.display.update()
+# INTRO
 
-while run:
-    sound_menu.play()
-    screen.blit(surf_text_air, (90, 200))
-    screen.blit(surf_text_battle, (200, 200))
-    screen.blit(surf_text_number, (200, 250))
-    time.sleep(1)
-    pygame.draw.rect(screen, BLACK, (rect_nero.x, rect_nero.y, rect_nero.width, rect_nero.height))
-    pygame.display.update()
-    time.sleep(1)
-    screen.blit(surf_text_play, (50, 400))
-    pygame.display.update()
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-            run = False
-sound_menu.stop()
+# screen.fill(BLACK)
+# sound_intro.play()
+# time.sleep(1)
+# screen.blit(surf_text_air, (90, 200))
+# pygame.display.update()
+# time.sleep(2)
+# screen.blit(surf_text_battle, (200, 200))
+# pygame.display.update()
+# time.sleep(2)
+# screen.blit(surf_text_number, (200, 250))
+# pygame.display.update()
+# time.sleep(2)
+# screen.blit(surf_text_play, (50, 400))
+# run = True
+# pygame.display.update()
+
+# while run:
+#     sound_menu.play()
+#     screen.blit(surf_text_air, (90, 200))
+#     screen.blit(surf_text_battle, (200, 200))
+#     screen.blit(surf_text_number, (200, 250))
+#     time.sleep(1)
+#     pygame.draw.rect(screen, BLACK, (rect_nero.x, rect_nero.y, rect_nero.width, rect_nero.height))
+#     pygame.display.update()
+#     time.sleep(1)
+#     screen.blit(surf_text_play, (50, 400))
+#     pygame.display.update()
+#     for event in pygame.event.get():
+#         if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+#             run = False
+# sound_menu.stop()
 
 
 jet_texture = carica_texture_spaceships()
@@ -103,7 +106,7 @@ sfondo = pygame.transform.rotate(sfondo, 90)
 sfondo = pygame.transform.scale(sfondo, (WIDTH, HEIGHT))
 img_effetti = pygame.transform.scale(img_effetti, (dim_fuoco_x, dim_fuoco_y))
 jet = 1
-jedi_nave = carica_texture_jedi()
+# jedi_nave = carica_texture_jedi()
 aereo = Aereo(aereo_rect, jet_texture[1][jet], img_effetti, screen, jet)
 
 lista_proiettili = []
@@ -117,10 +120,14 @@ conta1 = 0
 punteggio = [0]
 punteggio[0] = 0
 temporanea = 0
+vel_nemici_default = [0, 7]
 ultimo_proiettile = 0
 t_invulnerabilita = 0
 lista_esplosioni = []
 spazzatura = []
+pos_rect_nemici = []
+vel_nemici = []
+da_aggiornare = []
 font_punteggio = pygame.font.SysFont("Times New Roman", 20)
 font_punteggio_finale = pygame.font.SysFont("Times New Roman", 30)
 font_record = pygame.font.SysFont("Times New Roman", 30)
@@ -131,7 +138,7 @@ while gameover == False:
     spara = False
     clock.tick(FPS)
     lasciato_ad = [False, False]
-    #sound_aereo.play(-1)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameover = True
@@ -139,7 +146,8 @@ while gameover == False:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == pygame.BUTTON_LEFT:
                 sound_laser.play()
-                pos_proiettili = genera_proiettili(3, 15, aereo.rect, dim_proiettile_x, dim_proiettile_y)
+                proiettile_rect = pygame.Rect(0, 0, dim_proiettile_x, dim_proiettile_y)
+                pos_proiettili = genera_proiettili(1, 15, aereo.rect, proiettile_rect)
                 for pos in pos_proiettili:
                     proiettile_rect = pygame.Rect(pos[0], pos[1], dim_proiettile_x, dim_proiettile_y)
                     p = Proiettile(proiettile_rect, img_proiettile, screen)
@@ -155,36 +163,77 @@ while gameover == False:
     key_pressed = pygame.key.get_pressed()
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 
-    if tempo != 0 and int(tempo) % 1 == 0 and int(tempo) == (contatore / 60):
-        q = Nemico(tempo, nemici_texture)
-        lista_nemici.append(q)
 
-    lista_nemici = move_nemico(lista_nemici)
+    if tempo != 0 and int(tempo) % 2 == 0 and int(tempo) == (contatore / 60): 
+        q1 = Nemico(aereo, None, vel_nemici_default, -1, tempo, nemici_texture)
+        nnemici = 4
+        percentuale = randint(0, 100)
+        # percentuale = 10
+        if percentuale < 25:
+            pos_rect_nemici = genera_rettangoli_casuali(nnemici, q1.rect)
+            for i in range(len(pos_rect_nemici)):
+                q2 = Nemico(aereo, (pos_rect_nemici[i].x, pos_rect_nemici[i].y), [0, randint(4, 7)], q1.tipo, tempo, nemici_texture)
+                lista_nemici.append(q2)
+        elif percentuale < 50:
+            pos_rect_nemici = crea_posizioni(nnemici, (q1.rect.width, q1.rect.height), (0, 0), (WIDTH, 0))
+            vel_nemici = calculate_speeds(randint(3, 8), pos_rect_nemici, (aereo.rectv.x + aereo.rect.width/2, aereo.rectv.y + aereo.rect.height/2))
+            for i in range(len(pos_rect_nemici)):
+                q2 = Nemico(aereo, (pos_rect_nemici[i].x, pos_rect_nemici[i].y), [vel_nemici[i][0], vel_nemici[i][1]], q1.tipo, tempo, nemici_texture)
+                lista_nemici.append(q2)
+        elif percentuale < 75:
+            pos_rect_nemici = generate_rectangles_on_edges(nnemici, q1.rect.width, q1.rect.height, q1.rect.height, 350)
+            vel_nemici = calculate_speeds(randint(3, 8), pos_rect_nemici, (aereo.rectv.x + aereo.rect.width/2, aereo.rectv.y + aereo.rect.height/2))
+            da_aggiornare.extend(vel_nemici)
+            for i in range(len(pos_rect_nemici)):
+                q2 = Nemico(aereo, (pos_rect_nemici[i].x, pos_rect_nemici[i].y), [vel_nemici[i][0], vel_nemici[i][1]], q1.tipo, tempo, nemici_texture)
+                lista_nemici.append(q2)
+        # else:
+        #     pos_rect_nemici = generate_pentagon_rectangles(q1.rect.width, q1.rect.height, 100)
+        #     vel_nemici = calculate_speeds(randint(3, 8), pos_rect_nemici, (randint(0, WIDTH - q1.rect.width), HEIGHT))
+        #     for i in range(len(pos_rect_nemici)):
+        #         q2 = Nemico(aereo, (pos_rect_nemici[i].x, pos_rect_nemici[i].y), [vel_nemici[i][0], vel_nemici[i][1]], q1.tipo, tempo, nemici_texture)
+        #         lista_nemici.append(q2)
+            
+            # print(pos_rect_nemici)
+            # velocita = []
+            # for i in range(nnemici):
+            #     arrivo = [aereo.rect.x + aereo.rect.width / 2, aereo.rect.y + aereo.rect.height / 2]
+            #     velocita.append(calcola_direzione(q.rectv, arrivo))
+        # elif percentuale < 80:
+        #     pass
+        # else:
+        #     pass
+        
+        
+    lista_nemici = move_nemico(lista_nemici, punteggio)
     aereo.move(key_pressed, lista_proiettili, lasciato_ad, mouse_pos)
-
     lista_proiettili = move_proiettili(lista_proiettili)
-    for i in range(len(lista_proiettili)):
-        print(lista_proiettili[i].proiettili)
+        
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
     aereo.draw_lifebar(screen)
     draw_nemico(lista_nemici, screen)
     for esp in lista_esplosioni:
         esp.draw(screen)
-        
     aereo.draw(screen) 
     draw_proiettili(lista_proiettili, screen)
+
+    print("stampa prima delle collisioni")
     
     for nemico in lista_nemici:
-        if aereo.rectv.colliderect(nemico.rectv) and tempo - t_invulnerabilita > 1:
+        if aereo.rectv.colliderect(nemico.rect) and tempo - t_invulnerabilita > 1:
             aereo.vita = 0
             t_invulnerabilita = tempo
     if aereo.vita <= 0 :
         gameover = True
     
-    tmp = collisione_pn(lista_proiettili, lista_nemici, punteggio, temporanea, nemici_texture)
+    tmp = collisione_pn(lista_proiettili, lista_nemici)
     proiettili_colpiti = tmp[0]
     nemici_colpiti = frequenze_lista(tmp[1])
+    
+    for el in nemici_colpiti:
+        punteggio[0] += temporanea+50+(el.tipo_img*50)
+    
     for p in proiettili_colpiti:
         lista_proiettili.remove(p)
     for key in nemici_colpiti:
@@ -203,7 +252,7 @@ while gameover == False:
     mouse_pos_2 = pygame.mouse.get_pos()
     mouse_pressed = pygame.mouse.get_pressed()
 
-    if mouse_pressed[2] == True and rect_pausa_grande.collidepoint(mouse_pos_2):
+    if (mouse_pressed[2] == True and rect_pausa_grande.collidepoint(mouse_pos_2)) or key_pressed[pygame.K_ESCAPE] == True:
         while run1:
             pygame.draw.rect(screen, WHITE, rect_exit, 2)
             screen.blit(surf_text_exit, (rect_exit.x+(rect_exit.width//2)-48, rect_exit.y+(rect_exit.height//2)-30))
@@ -217,11 +266,11 @@ while gameover == False:
                     screen.blit(surf_text_no, ((WIDTH//2), (HEIGHT//2)+50))
                     mouse_pos_2 = pygame.mouse.get_pos()
                     mouse_pressed = pygame.mouse.get_pressed()
-                    if mouse_pressed[2] == True and rect_yes.collidepoint(mouse_pos_2):
+                    if mouse_pressed[0] == True and rect_yes.collidepoint(mouse_pos_2):
                         run2 = False
                         run1 = False
                         gameover = True
-                    if mouse_pressed[2] == True and rect_no.collidepoint(mouse_pos_2):
+                    if mouse_pressed[0] == True and rect_no.collidepoint(mouse_pos_2):
                         run2 = False
                         run1 = False
                     for event in pygame.event.get():

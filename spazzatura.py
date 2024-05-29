@@ -1,59 +1,56 @@
 import pygame
 import math
+import random
 
-# Inizializzazione di Pygame
+def generate_pentagon_rectangles(rectangle_width, rectangle_height, distance):
+    rectangles = []
+
+    # Genera il centro del pentagono in modo casuale sull'asse x
+    pentagon_center_x = random.randint(rectangle_width // 2, 800 - rectangle_width // 2)
+
+    # Calcola la distanza dal centro del pentagono al vertice
+    radius = distance / (2 * math.sin(math.radians(180 / 5)))
+
+    # Calcola l'angolo per ogni vertice del pentagono
+    angles = [math.radians(angle) for angle in range(90, 450, 72)]
+
+    # Genera i rettangoli per ciascun vertice del pentagono
+    for angle in angles:
+        x = pentagon_center_x + radius * math.cos(angle) - rectangle_width // 2
+        y = radius * math.sin(angle)
+
+        rectangles.append(pygame.Rect(x, y, rectangle_width, rectangle_height))
+
+    # Trasla i rettangoli in modo che il rettangolo più basso abbia il suo fondo coincidente con y = 0
+    min_y = min(rect.y for rect in rectangles)
+    for rect in rectangles:
+        rect.y -= min_y
+
+    return rectangles
+
+# Esempio di utilizzo
 pygame.init()
-
-# Definizione delle dimensioni della finestra
-width, height = 800, 600
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Proiettili da un rettangolo")
-
-# Colori
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-BLACK = (0, 0, 0)
-
-# Definizione del rettangolo (dimensioni fisse)
-rect_x, rect_y = 300, 200
-rect_width, rect_height = 200, 150
-rect = pygame.Rect(rect_x, rect_y, rect_width, rect_height)
-
-# Parametri dei proiettili
-num_projectiles = 12  # Cambia questo valore per testare diverse configurazioni
-distance_between_projectiles = 20  # Distanza fissa tra i proiettili
-projectile_width, projectile_height = 5, 10  # Dimensioni del proiettile
-
-# Funzione per generare proiettili dal bordo superiore del rettangolo
-def generate_projectiles(n, fixed_distance, rect):
-    x1, y1 = rect.left, rect.top  # Coordinate del vertice superiore sinistro
-    center_x = x1 + rect.width / 2  # Centro del bordo superiore del rettangolo
-
-    # Calcolare l'offset per mantenere i proiettili simmetrici rispetto al centro
-    total_width = (n - 1) * fixed_distance
-    offset = center_x - total_width / 2
-
-    points = []
-
-    for i in range(n):
-        x = offset + i * fixed_distance  # Calcolo della posizione x
-        y = y1 - projectile_height  # La posizione y è il bordo superiore meno l'altezza del proiettile
-        points.append((x, y))  # Aggiungi solo le coordinate x e y
-
-    return points
-
-# Generare i proiettili
-projectiles = generate_projectiles(num_projectiles, distance_between_projectiles, rect)
-print(projectiles)
-# Loop principale del gioco
-running = True
+window_width = 800
+window_height = 600
+screen = pygame.display.set_mode((window_width, window_height))
 clock = pygame.time.Clock()
 
+distance_between_vertices = 100  # Distanza tra i vertici del pentagono
+rectangles = generate_pentagon_rectangles(30, 30, distance_between_vertices)
+
+running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    rect = pygame.Rect(1/3, 13/12, 40, 80)
+    screen.fill((255, 255, 255))
+
+    # Disegna i rettangoli
+    for rect in rectangles:
+        pygame.draw.rect(screen, (255, 0, 0), rect)
+
+    pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()

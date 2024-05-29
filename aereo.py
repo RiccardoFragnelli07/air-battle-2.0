@@ -1,6 +1,6 @@
 import pygame
 import math
-from funzioni import carica_texture_spaceships, distanza_punti, carica_texture_jedi
+from funzioni import carica_texture_spaceships, distanza_punti
 
 VEL = 7
 ROTAZIONE = 0.6

@@ -1,1 +1,1 @@
-print
+genera_rettangoli_casuali
