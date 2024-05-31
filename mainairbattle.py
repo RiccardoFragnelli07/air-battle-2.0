@@ -58,7 +58,6 @@ for i in range(8):
     img = pygame.image.load(f"immagini\\pianeti\\{i+1}.gif")
     pianeti.append(img)
 pianeti.append(pygame.image.load(f"immagini\\pianeti\\8.gif"))
-print(len(pianeti))
 
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 110, 110
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 45, 60
@@ -267,7 +266,7 @@ while gameover == False:
         q1 = Nemico(randint(3, 5), (spawn_x, 0), vel, nemici_texture)
         lista_nemici.append(q1)
             
-    if tempo >= 20 and int(tempo) % 45 == 0 and int(tempo) == (contatore / 60) and autorizza == False:
+    if tempo >= 20 and int(tempo) % 60 == 0 and int(tempo) == (contatore / 60) and autorizza == False:
         stop = True
         autorizza = True
         spawn_x = (WIDTH / 2 - dim_nemico7_x / 2, 0)
@@ -314,7 +313,6 @@ while gameover == False:
         
     draw_proiettili(lista_proiettili, screen)
     draw_proiettili(lista_proiettili_nemici, screen)    
-    print(aereo.laser)
     if spara_laser and tempo - tempo_laser < 5:
         sound_laser.play()
         proiettile_rect = pygame.Rect(aereo.rectv.x + aereo.rectv.width/2 - dim_proiettile_x/2, aereo.rectv.y - dim_proiettile_y/2, dim_proiettile_x, dim_proiettile_y)
@@ -330,7 +328,7 @@ while gameover == False:
                 rubbish.append(p)
         for r in rubbish:
             lista_proiettili.remove(r)
-    
+    print(tempo)       
     for nemico in lista_nemici:
         if aereo.rectv.colliderect(nemico.rect) and tempo - t_invulnerabilita > 1:
             aereo.vita -= 3
@@ -382,7 +380,6 @@ while gameover == False:
                     vely *= -1
                 w = Powerup(pygame.Rect(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, dim_powerup_x, dim_powerup_y), key.rect, [velx, vely], aereo.proiettili)
                 lista_powerup.append(w)
-                print(w.tipo)
             e = Esplosione(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, 1.5)
             lista_esplosioni.append(e)
             if key in lista_nemici:  

@@ -20,7 +20,7 @@ class Powerup:
         self.img = pygame.transform.scale(self.img, (self.rect.width, self.rect.height))
         if percentuale < 40 and nproiettili <= MAX_PROIETTILI:
             self.tipo = 0
-        elif percentuale < 80:
+        elif percentuale < 75:
             self.tipo = 1
         else:
             self.tipo = 2
