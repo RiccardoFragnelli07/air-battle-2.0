@@ -37,7 +37,7 @@ class Aereo:
         self.vita = TOT_VITE
         self.proiettili = 1
         self.pow = False
-        self.laser = True
+        self.laser = False
         
 
         
