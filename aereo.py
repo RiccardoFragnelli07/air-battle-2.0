@@ -9,7 +9,7 @@ DEROTAZIONE = 1.2
 HEIGHT = 690
 WIDTH = 500
 IND = 0
-TOT_VITE = 3
+TOT_VITE = 5
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -23,7 +23,7 @@ arr = [[base_rect.x + 12*dim_aereo_x/100, base_rect.y + 9*dim_aereo_x/100, 74*di
        [base_rect.x + 21*dim_aereo_x/100, base_rect.y + 12*dim_aereo_x/100, 56*dim_aereo_x/100, 69*dim_aereo_x/100]]
 
 class Aereo:
-    def __init__(self, rect, img, img_effetti, screen, num, time = 0):
+    def __init__(self, rect, img, screen, num, time = 0):
         self.rect = rect
         self.img = img
         self.screen = screen
@@ -36,20 +36,10 @@ class Aereo:
         self.rectv = pygame.Rect(arr[num][0], arr[num][1], arr[num][2], arr[num][3])
         self.vita = TOT_VITE
         self.proiettili = 1
+        self.pow = True
+        self.laser = False
         
-        # self.rectv = pygame.Rect(self.rect.x + 84.5, self.rect.y + 21.5, 70.5, 88.5)
-        
-        # effetti_width = img_effetti.get_width() // 8
-        # effetti_height = img_effetti.get_height()
-        # for i in range(8):
-        #     startx = i * effetti_width
-        #     img_part = img_effetti.subsurface((startx, 0, effetti_width, effetti_height))
-        #     self.effetti.append(img_part)
-        # self.centro_aereo = pygame.math.Vector2(self.rect.x + self.rect.width, self.rect.y + self.rect.height)
-        
-        # self.jet = self.img
-        # for i in range(len(self.jet)):
-        #     self.jet[i] = pygame.transform.scale(self.jet[i], (120, 120))
+
         
         self.jet = []
         jet_width = self.img.get_width() // 60

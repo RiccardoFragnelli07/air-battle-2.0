@@ -31,28 +31,33 @@ def carica_texture_nemici(immagini = []):
     return immagini
 
 
-def genera_navicella(time):
-    if time >= 0 and time <= 15:
-        navicella = randint(0, 1)
-    elif time > 15 and time <= 60:
-        navicella = randint(0, 3)
-    else:
-        num = randint(1, 100)
-        if num >= 1 and num <= 30:
-            navicella = randint(0, 1)
-        elif num > 30 and num <= 80:
-            navicella = randint(2, 3)
+def genera_navicella(tipo):
+    if tipo == 0:
+        percentuale = randint(0, 100)
+        if percentuale < 0:
+            ris = randint(0, 1)
         else:
-            navicella = randint(4, 5)
-    return navicella
+            ris = 2
+    elif tipo == 1:
+        percentuale = randint(0, 100)
+        if percentuale < 45:
+            ris = 3
+        elif percentuale < 80:
+            ris = 4
+        else:
+            ris = 5
+    elif tipo == 2:
+        ris = 6 
+    
+    return ris
 
 def collisione_pn(l1, l2):
     lista_colpiti = []
     proiettili_colpiti = []
     for i in range(len(l1)):
         for j in range(len(l2)):
-            if l1[i].rect.colliderect(l2[j]):
-                proiettili_colpiti.append(l1[i])  
+            if l1[i].rect.colliderect(l2[j]) and l1[i].vel[1] < 0:
+                proiettili_colpiti.append(l1[i])   
                 lista_colpiti.append(l2[j])
                 break
             
@@ -60,7 +65,7 @@ def collisione_pn(l1, l2):
 
 
 def distanza_punti(a, b):
-    return ((a.x - b.x)**2 + (a.y - b.y)**2)**(0.5)
+    return ((a[0] - b[0])**2 + (a[1] - b[1])**2)**(0.5)
 
 
 def genera_proiettili(n, distanza, aereo_rect, proiettile_rect):
@@ -239,3 +244,10 @@ def generate_pentagon_rectangles(rectangle_width, rectangle_height, distance):
         y += rectangle_height
 
     return rectangles
+
+
+def mothership_nello_schermo(lista):
+    for el in lista:
+        if el.tipo == 6:
+            return True
+    return False

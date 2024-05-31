@@ -1,56 +1,66 @@
 import pygame
-import math
-import random
+import sys
 
-def generate_pentagon_rectangles(rectangle_width, rectangle_height, distance):
-    rectangles = []
-
-    # Genera il centro del pentagono in modo casuale sull'asse x
-    pentagon_center_x = random.randint(rectangle_width // 2, 800 - rectangle_width // 2)
-
-    # Calcola la distanza dal centro del pentagono al vertice
-    radius = distance / (2 * math.sin(math.radians(180 / 5)))
-
-    # Calcola l'angolo per ogni vertice del pentagono
-    angles = [math.radians(angle) for angle in range(90, 450, 72)]
-
-    # Genera i rettangoli per ciascun vertice del pentagono
-    for angle in angles:
-        x = pentagon_center_x + radius * math.cos(angle) - rectangle_width // 2
-        y = radius * math.sin(angle)
-
-        rectangles.append(pygame.Rect(x, y, rectangle_width, rectangle_height))
-
-    # Trasla i rettangoli in modo che il rettangolo più basso abbia il suo fondo coincidente con y = 0
-    min_y = min(rect.y for rect in rectangles)
-    for rect in rectangles:
-        rect.y -= min_y
-
-    return rectangles
-
-# Esempio di utilizzo
 pygame.init()
-window_width = 800
-window_height = 600
-screen = pygame.display.set_mode((window_width, window_height))
+
+# Dimensioni della finestra
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Doppio Salto con Pavimento e Soglia")
+
+# Colori
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+# Proprietà del rettangolo
+rect_width, rect_height = 50, 50
+rect_x, rect_y = width // 2, height - rect_height
+rect_color = white
+
+# Coordinata y del pavimento e della soglia di salto
+floor_y = height - rect_height
+jump_stop_y = height - 2 * rect_height
+
+# Velocità e gravità
+gravity = 1
+jump_strength = -15
+double_jump_strength = -12
+velocity_y = 0
+jumps = 0
+
 clock = pygame.time.Clock()
 
-distance_between_vertices = 100  # Distanza tra i vertici del pentagono
-rectangles = generate_pentagon_rectangles(30, 30, distance_between_vertices)
-
-running = True
-while running:
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                if jumps < 2:
+                    if jumps == 0:
+                        velocity_y = jump_strength
+                    else:
+                        velocity_y = double_jump_strength
+                    jumps += 1
 
-    screen.fill((255, 255, 255))
+    # Applicare la gravità
+    velocity_y += gravity
+    rect_y += velocity_y
 
-    # Disegna i rettangoli
-    for rect in rectangles:
-        pygame.draw.rect(screen, (255, 0, 0), rect)
+    # Controllare collisioni con il pavimento
+    if rect_y >= floor_y:
+        rect_y = floor_y
+        velocity_y = 0
+        jumps = 0
 
+    # Fermarsi alla coordinata y specifica durante il salto
+    if rect_y <= jump_stop_y:
+        rect_y = jump_stop_y
+        velocity_y = 0
+
+    # Disegnare tutto
+    screen.fill(black)
+    pygame.draw.rect(screen, rect_color, (rect_x, rect_y, rect_width, rect_height))
     pygame.display.flip()
     clock.tick(60)
-
-pygame.quit()
