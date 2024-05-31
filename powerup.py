@@ -17,7 +17,7 @@ class Powerup:
         self.rect.y = nemico_rect.y + nemico_rect.height / 2 - self.rect.height / 2
         self.img = texture
         self.img = pygame.transform.scale(self.img, (self.rect.width, self.rect.height))
-        if percentuale < 50 and nproiettili <= 10:
+        if percentuale < 70 and nproiettili <= 10:
             self.tipo = 0
         else:
             self.tipo = 1

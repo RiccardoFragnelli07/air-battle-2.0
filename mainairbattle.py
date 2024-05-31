@@ -153,6 +153,7 @@ lista_esplosioni = []
 spazzatura = []
 pos_rect_nemici = []
 vel_nemici = []
+pow_false = False
 via = False
 lista_proiettili_nemici = []
 tempo_laser = 0
@@ -189,7 +190,7 @@ while gameover == False:
                         e = Esplosione(n.rect.x + n.rect.width/2, n.rect.y + n.rect.height/2, 0.7)
                         lista_esplosioni.append(e)
                     lista_nemici.clear()
-                    aereo.pow = False
+                    pow_false = True
                 # if aereo.laser:
                 #     tempo_laser = tempo
                 #     via = True    
@@ -339,7 +340,7 @@ while gameover == False:
     for key in nemici_colpiti:
         key.health -= nemici_colpiti[key]
         if key.health <= 0:
-            if randint(0, 100) < 80:
+            if randint(0, 100) < 4:
                 velx = randint(1, 6)
                 vely = randint(1, 6)
                 if randint(0, 1) == 0:
@@ -355,6 +356,10 @@ while gameover == False:
         else:
             e = Esplosione(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, 3)
             lista_esplosioni.append(e)
+    
+    if pow_false:
+        aereo.pow = False
+        pow_false = True
     
     surf_text_punteggio = font_punteggio.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
     pygame.draw.rect(screen, WHITE, rect_pausa_grande, 2)
