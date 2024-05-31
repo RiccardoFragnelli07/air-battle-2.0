@@ -9,7 +9,7 @@ DEROTAZIONE = 1.2
 HEIGHT = 690
 WIDTH = 500
 IND = 0
-TOT_VITE = 20
+TOT_VITE = 15
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -37,7 +37,7 @@ class Aereo:
         self.vita = TOT_VITE
         self.proiettili = 1
         self.pow = False
-        self.laser = False
+        self.laser = True
         
 
         

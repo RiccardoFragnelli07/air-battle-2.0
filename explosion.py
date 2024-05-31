@@ -4,7 +4,6 @@ import os
 EXPLOSION_SPEED = 1
 
 espl = pygame.image.load("immagini\\animazioni_esplosione1.png") 
-coll = pygame.image.load("immagini\\animazioni_collisione.png")
 nespx = 5
 nespy = 5
 

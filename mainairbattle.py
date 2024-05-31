@@ -5,6 +5,7 @@ import time
 
 from random import randint
 from aereo import Aereo
+from pianeta import Pianeta
 from proiettile import Proiettile, draw_proiettili, move_proiettili
 from nemico import Nemico, move_nemico, draw_nemico
 from funzioni import carica_texture_spaceships, carica_texture_nemici, calculate_speeds, genera_rettangoli_casuali
@@ -18,9 +19,9 @@ pygame.init()
 WIDTH, HEIGHT = 500, 700
 WHITE = (255,255,255)
 BLACK = (0,0,0)
-VEL_SFONDO = 3
+VEL_SFONDO = 5
 FREQ_PROIETTILI = 0.15
-POWERUP_PERC = 5
+POWERUP_PERC = 4
 
 sound_game = pygame.mixer.Sound("suoni\\Legend.mp3")
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
@@ -52,10 +53,18 @@ font_no = pygame.font.SysFont("Copperplate Gothic", 50)
 surf_text_no = font_no.render("NO", True, WHITE)
 rect_no = pygame.Rect((WIDTH//2)+5, (HEIGHT//2)+60, 80, 35)
 
+pianeti = []
+for i in range(8):
+    img = pygame.image.load(f"immagini\\pianeti\\{i+1}.gif")
+    pianeti.append(img)
+pianeti.append(pygame.image.load(f"immagini\\pianeti\\8.gif"))
+print(len(pianeti))
+
 aereo_x, aereo_y, dim_aereo_x, dim_aereo_y = 150, 545, 110, 110
 proiettile_x, proiettile_y, dim_proiettile_x, dim_proiettile_y = 50, 50, 45, 60
 dim_powerup_x, dim_powerup_y = 60, 60
 dim_fuoco_x, dim_fuoco_y = 800, 100
+pianeta_width, pianeta_height = 150, 150
 aereo_rect = pygame.Rect(aereo_x, aereo_y, dim_aereo_x, dim_aereo_y)
 jetNemico_y, dim_jetNemico_x, dim_jetNemico_y = 0, 50, 50
 lista_nemici = []
@@ -115,9 +124,11 @@ width_riquadro, height_riquadro = 40, 40
 texture_pow = pygame.image.load("immagini\\pow.png")
 texture_pow = pygame.transform.scale(texture_pow, (width_riquadro, height_riquadro))
 rect_texture_pow = pygame.Rect(WIDTH - width_riquadro - 20, HEIGHT - height_riquadro - 60, width_riquadro, height_riquadro)
-texture_laser = pygame.image.load("immagini\\laser_vero.png")
+texture_laser = pygame.image.load("immagini\\laser_texture.png")
 texture_laser = pygame.transform.scale(texture_laser, (width_riquadro, height_riquadro))
 rect_texture_laser = pygame.Rect(WIDTH - width_riquadro - 20, HEIGHT - height_riquadro - 60, width_riquadro, height_riquadro)
+img_laser_pw = pygame.image.load("immagini\\proiettile_laser.png")
+img_laser_pw = pygame.transform.rotate(img_laser_pw, 270)
 img_proiettile = pygame.image.load("immagini\\laser_jet.png")
 img_proiettile = pygame.transform.rotate(img_proiettile, 270)
 img_proiettile_nemico = pygame.image.load("immagini\\laser_nemico.png")
@@ -155,6 +166,7 @@ vel_nemici = []
 pow_false = False
 muovi_con_aereo = False
 spara_laser = False
+lista_pianeta = []
 lista_proiettili_nemici = []
 tempo_laser = 0
 lista_powerup = []
@@ -175,10 +187,10 @@ while gameover == False:
             gameover = True
             
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == pygame.BUTTON_LEFT:
+            if event.button == pygame.BUTTON_LEFT and spara_laser == False:
                 sound_laser.play()
                 proiettile_rect = pygame.Rect(0, 0, dim_proiettile_x, dim_proiettile_y)
-                pos_proiettili = genera_proiettili(aereo.proiettili, 15, aereo.rect, proiettile_rect)
+                pos_proiettili = genera_proiettili(int(aereo.proiettili), 15, aereo.rect, proiettile_rect)
                 for pos in pos_proiettili:
                     proiettile_rect = pygame.Rect(pos[0], pos[1], dim_proiettile_x, dim_proiettile_y)
                     p = Proiettile(proiettile_rect, img_proiettile, [0, -10])
@@ -268,15 +280,26 @@ while gameover == False:
         stop = False
         autorizza = False
         
+        
+    if tempo >= 5 and int(tempo) % 5 == 0 and int(tempo) == (contatore / 60):
+        r = pygame.Rect(randint(0, WIDTH - pianeta_width), pianeta_height * -1, pianeta_width, pianeta_height)
+        pianeta = Pianeta(r, VEL_SFONDO, pianeti)
+        lista_pianeta.append(pianeta)
+        
+        
     lista_nemici = move_nemico(lista_nemici, punteggio)
     aereo.move(key_pressed, lista_proiettili, lasciato_ad, mouse_pos)
     lista_proiettili = move_proiettili(lista_proiettili, aereo.rect, muovi_con_aereo)
     lista_proiettili_nemici = move_proiettili(lista_proiettili_nemici, aereo.rect)
     for w in lista_powerup:
         w.move()
+    for pianeta in lista_pianeta:
+        pianeta.move()
         
     screen.blit(sfondo, (0, -HEIGHT + conta))
     screen.blit(sfondo, (0, 0 + conta))
+    for pianeta in lista_pianeta:
+        pianeta.draw(screen)
     aereo.draw_lifebar(screen)
     draw_nemico(lista_nemici, screen)
     aereo.draw(screen) 
@@ -295,12 +318,18 @@ while gameover == False:
     if spara_laser and tempo - tempo_laser < 5:
         sound_laser.play()
         proiettile_rect = pygame.Rect(aereo.rectv.x + aereo.rectv.width/2 - dim_proiettile_x/2, aereo.rectv.y - dim_proiettile_y/2, dim_proiettile_x, dim_proiettile_y)
-        p = Proiettile(proiettile_rect, img_proiettile, [0, -10], True)
+        p = Proiettile(proiettile_rect, img_laser_pw, [0, -10], True)
         lista_proiettili.append(p)
     elif tempo - tempo_laser <= 6 and spara_laser == True:    
         spara_laser = False
         aereo.laser = False
         muovi_con_aereo = False
+        rubbish = []
+        for p in lista_proiettili:
+            if p.trapassa == True:
+                rubbish.append(p)
+        for r in rubbish:
+            lista_proiettili.remove(r)
     
     for nemico in lista_nemici:
         if aereo.rectv.colliderect(nemico.rect) and tempo - t_invulnerabilita > 1:
@@ -323,7 +352,7 @@ while gameover == False:
     for w in lista_powerup:
         if aereo.rect.colliderect(w.rect):
             if w.tipo == 0:
-                aereo.proiettili += 1
+                aereo.proiettili += 0.5
             if w.tipo == 1:
                 aereo.pow = True
                 aereo.laser = False

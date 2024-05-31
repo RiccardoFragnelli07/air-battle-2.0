@@ -3,6 +3,7 @@ from random import randint
 
 HEIGHT = 700
 WIDTH = 500
+MAX_PROIETTILI = 6
 
 texture = pygame.image.load("immagini\\powerup.png")
 
@@ -17,7 +18,7 @@ class Powerup:
         self.rect.y = nemico_rect.y + nemico_rect.height / 2 - self.rect.height / 2
         self.img = texture
         self.img = pygame.transform.scale(self.img, (self.rect.width, self.rect.height))
-        if percentuale < 40 and nproiettili <= 10:
+        if percentuale < 40 and nproiettili <= MAX_PROIETTILI:
             self.tipo = 0
         elif percentuale < 80:
             self.tipo = 1
