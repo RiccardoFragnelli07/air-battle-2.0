@@ -20,6 +20,7 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 VEL_SFONDO = 3
 FREQ_PROIETTILI = 0.15
+sound_game = pygame.mixer.Sound("suoni\\Legend.mp3")
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
 sound_laser = pygame.mixer.Sound("suoni\\laser-sound-1.mp3")
 sound_intro = pygame.mixer.Sound("suoni\\epic-sound.mp3")
@@ -163,6 +164,7 @@ font_punteggio_finale = pygame.font.SysFont("Times New Roman", 30)
 font_record = pygame.font.SysFont("Times New Roman", 30)
 
 while gameover == False:
+    sound_game.play(-1)
     run1 = True
     run2 = True
     spara = False
