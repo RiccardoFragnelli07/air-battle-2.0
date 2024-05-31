@@ -57,7 +57,8 @@ def collisione_pn(l1, l2):
     for i in range(len(l1)):
         for j in range(len(l2)):
             if l1[i].rect.colliderect(l2[j]) and l1[i].vel[1] < 0:
-                proiettili_colpiti.append(l1[i])   
+                if l1[i].trapassa == False:
+                    proiettili_colpiti.append(l1[i])   
                 lista_colpiti.append(l2[j])
                 break
             

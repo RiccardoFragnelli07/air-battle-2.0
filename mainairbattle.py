@@ -20,6 +20,8 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 VEL_SFONDO = 3
 FREQ_PROIETTILI = 0.15
+POWERUP_PERC = 5
+
 sound_game = pygame.mixer.Sound("suoni\\Legend.mp3")
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
 sound_laser = pygame.mixer.Sound("suoni\\laser-sound-1.mp3")
@@ -109,17 +111,13 @@ sound_menu.stop()
 jet_texture = carica_texture_spaceships()
 nemici_texture = carica_texture_nemici()
 sfondo = pygame.image.load("immagini\\Background.jpg")
-width_riquadro, height_riquadro = 30, 30
+width_riquadro, height_riquadro = 40, 40
 texture_pow = pygame.image.load("immagini\\pow.png")
 texture_pow = pygame.transform.scale(texture_pow, (width_riquadro, height_riquadro))
 rect_texture_pow = pygame.Rect(WIDTH - width_riquadro - 20, HEIGHT - height_riquadro - 60, width_riquadro, height_riquadro)
-# texture_missile = pygame.image.load("immagini\\missile2.png")
-# img_missile = pygame.image.load("immagini\\missile1.png")
-# rect_missile = img_missile.get_rect()
-# img_missile = pygame.transform.scale(img_missile, (rect_missile.width/2, rect_missile.height/2))
-# rect_missile = .get_rect()
-# texture_missile = pygame.transform.scale(texture_missile, (width_riquadro, height_riquadro))
-# rect_texture_missile = pygame.Rect(WIDTH - width_riquadro - 20, HEIGHT - height_riquadro - 60, width_riquadro, height_riquadro)
+texture_laser = pygame.image.load("immagini\\laser_vero.png")
+texture_laser = pygame.transform.scale(texture_laser, (width_riquadro, height_riquadro))
+rect_texture_laser = pygame.Rect(WIDTH - width_riquadro - 20, HEIGHT - height_riquadro - 60, width_riquadro, height_riquadro)
 img_proiettile = pygame.image.load("immagini\\laser_jet.png")
 img_proiettile = pygame.transform.rotate(img_proiettile, 270)
 img_proiettile_nemico = pygame.image.load("immagini\\laser_nemico.png")
@@ -155,7 +153,8 @@ spazzatura = []
 pos_rect_nemici = []
 vel_nemici = []
 pow_false = False
-via = False
+muovi_con_aereo = False
+spara_laser = False
 lista_proiettili_nemici = []
 tempo_laser = 0
 lista_powerup = []
@@ -192,10 +191,11 @@ while gameover == False:
                         e = Esplosione(n.rect.x + n.rect.width/2, n.rect.y + n.rect.height/2, 0.7)
                         lista_esplosioni.append(e)
                     lista_nemici.clear()
-                    pow_false = True
-                # if aereo.laser:
-                #     tempo_laser = tempo
-                #     via = True    
+                    aereo.pow = False
+                if aereo.laser:
+                    tempo_laser = tempo
+                    spara_laser = True 
+                    muovi_con_aereo = True   
                 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
@@ -270,8 +270,8 @@ while gameover == False:
         
     lista_nemici = move_nemico(lista_nemici, punteggio)
     aereo.move(key_pressed, lista_proiettili, lasciato_ad, mouse_pos)
-    lista_proiettili = move_proiettili(lista_proiettili)
-    lista_proiettili_nemici = move_proiettili(lista_proiettili_nemici)
+    lista_proiettili = move_proiettili(lista_proiettili, aereo.rect, muovi_con_aereo)
+    lista_proiettili_nemici = move_proiettili(lista_proiettili_nemici, aereo.rect)
     for w in lista_powerup:
         w.move()
         
@@ -286,21 +286,21 @@ while gameover == False:
         powerup.draw(screen)
     if aereo.pow:
         screen.blit(texture_pow, (rect_texture_pow.x, rect_texture_pow.y))
+    if aereo.laser:
+        screen.blit(texture_laser, (rect_texture_laser.x, rect_texture_laser.y))
         
     draw_proiettili(lista_proiettili, screen)
     draw_proiettili(lista_proiettili_nemici, screen)    
-    
-    # if via and tempo - tempo_laser < 6:
-    #     sound_laser.play()
-    #     proiettile_rect = pygame.Rect(0, 0, dim_proiettile_x, dim_proiettile_y)
-    #     pos_proiettili = genera_proiettili(aereo.proiettili, 15, aereo.rect, proiettile_rect)
-    #     for pos in pos_proiettili:
-    #         proiettile_rect = pygame.Rect(pos[0], pos[1], dim_proiettile_x, dim_proiettile_y)
-    #         p = Proiettile(proiettile_rect, img_proiettile, [0, -10])
-    #         lista_proiettili.append(p)
-    # elif tempo - tempo_laser <= 6:
-    #     via = False
-    #     aereo.laser = False
+    print(aereo.laser)
+    if spara_laser and tempo - tempo_laser < 5:
+        sound_laser.play()
+        proiettile_rect = pygame.Rect(aereo.rectv.x + aereo.rectv.width/2 - dim_proiettile_x/2, aereo.rectv.y - dim_proiettile_y/2, dim_proiettile_x, dim_proiettile_y)
+        p = Proiettile(proiettile_rect, img_proiettile, [0, -10], True)
+        lista_proiettili.append(p)
+    elif tempo - tempo_laser <= 6 and spara_laser == True:    
+        spara_laser = False
+        aereo.laser = False
+        muovi_con_aereo = False
     
     for nemico in lista_nemici:
         if aereo.rectv.colliderect(nemico.rect) and tempo - t_invulnerabilita > 1:
@@ -322,12 +322,14 @@ while gameover == False:
     
     for w in lista_powerup:
         if aereo.rect.colliderect(w.rect):
-            if w.tipo == 0 and tempo - t_invulnerabilita > 1:
+            if w.tipo == 0:
                 aereo.proiettili += 1
-                t_invulnerabilita = tempo
-            if w.tipo == 1 and tempo - t_invulnerabilita > 1:
-                aereo.pow == True
-                t_invulnerabilita = tempo
+            if w.tipo == 1:
+                aereo.pow = True
+                aereo.laser = False
+            if w.tipo == 2:
+                aereo.laser = True
+                aereo.pow = False
             da_rimuovere.append(w)
     for w in da_rimuovere:
         lista_powerup.remove(w)
@@ -342,7 +344,7 @@ while gameover == False:
     for key in nemici_colpiti:
         key.health -= nemici_colpiti[key]
         if key.health <= 0:
-            if randint(0, 100) < 4:
+            if randint(0, 100) < POWERUP_PERC:
                 velx = randint(1, 6)
                 vely = randint(1, 6)
                 if randint(0, 1) == 0:
@@ -351,6 +353,7 @@ while gameover == False:
                     vely *= -1
                 w = Powerup(pygame.Rect(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, dim_powerup_x, dim_powerup_y), key.rect, [velx, vely], aereo.proiettili)
                 lista_powerup.append(w)
+                print(w.tipo)
             e = Esplosione(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, 1.5)
             lista_esplosioni.append(e)
             if key in lista_nemici:  
