@@ -372,6 +372,7 @@ while gameover == False:
     mouse_pressed = pygame.mouse.get_pressed()
 
     if (mouse_pressed[2] == True and rect_pausa_grande.collidepoint(mouse_pos_2)) or key_pressed[pygame.K_ESCAPE] == True:
+        sound_game.stop()
         while run1:
             pygame.draw.rect(screen, WHITE, rect_exit, 2)
             screen.blit(surf_text_exit, (rect_exit.x+(rect_exit.width//2)-48, rect_exit.y+(rect_exit.height//2)-30))
@@ -407,6 +408,8 @@ while gameover == False:
                     gameover = True
             
             pygame.display.update()
+    
+    sound_game.play()
     
     screen.blit(surf_text_punteggio, (0,0))      
     if conta >= HEIGHT:
