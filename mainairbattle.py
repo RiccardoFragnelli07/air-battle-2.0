@@ -419,6 +419,8 @@ while gameover == False:
 
     pygame.display.update()
 
+sound_game.stop()
+
 surf_text_punteggio = font_punteggio_finale.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
 stringa = []
 with open('record.txt', 'r', encoding = 'utf-8') as f:
