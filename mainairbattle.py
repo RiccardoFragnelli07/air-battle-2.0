@@ -21,7 +21,7 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 VEL_SFONDO = 5
 FREQ_PROIETTILI = 0.15
-POWERUP_PERC = 4
+POWERUP_PERC = 3
 
 sound_game = pygame.mixer.Sound("suoni\\Legend.mp3")
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
@@ -328,7 +328,7 @@ while gameover == False:
                 rubbish.append(p)
         for r in rubbish:
             lista_proiettili.remove(r)
-    print(tempo)       
+    print(aereo.vita)       
     for nemico in lista_nemici:
         if aereo.rectv.colliderect(nemico.rect) and tempo - t_invulnerabilita > 1:
             aereo.vita -= 3
@@ -350,7 +350,7 @@ while gameover == False:
     for w in lista_powerup:
         if aereo.rect.colliderect(w.rect):
             if w.tipo == 0:
-                aereo.proiettili += 0.5
+                aereo.proiettili += 0.75
             if w.tipo == 1:
                 aereo.pow = True
                 aereo.laser = False
