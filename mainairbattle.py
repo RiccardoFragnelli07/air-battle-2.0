@@ -23,9 +23,10 @@ VEL_SFONDO = 5
 FREQ_PROIETTILI = 0.15
 POWERUP_PERC = 3
 
-sound_game = pygame.mixer.Sound("suoni\\Legend.mp3")
+pygame.mixer.music.load("suoni\\Legend.mp3")
 sound_death = pygame.mixer.Sound("suoni\\dark-souls-you-died-sound-effect.mp3")
 sound_laser = pygame.mixer.Sound("suoni\\laser-sound-1.mp3")
+sound_spada_laser = pygame.mixer.Sound("suoni\\starwarslaser.mp3")
 sound_intro = pygame.mixer.Sound("suoni\\epic-sound.mp3")
 sound_menu = pygame.mixer.Sound("suoni\\drum-loop.mp3")
 sound_aereo = pygame.mixer.Sound("suoni\\sound-jet.mp3")
@@ -173,13 +174,16 @@ font_punteggio = pygame.font.SysFont("Times New Roman", 20)
 font_punteggio_finale = pygame.font.SysFont("Times New Roman", 30)
 font_record = pygame.font.SysFont("Times New Roman", 30)
 
+pygame.mixer.music.set_volume(0.7)
+sound_laser.set_volume(0.1)
+pygame.mixer.music.play(-1)
 while gameover == False:
-    sound_game.play(-1)
     run1 = True
     run2 = True
     spara = False
     clock.tick(FPS)
     lasciato_ad = [False, False]
+    sound_spada_laser.set_volume(1)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -314,11 +318,14 @@ while gameover == False:
     draw_proiettili(lista_proiettili, screen)
     draw_proiettili(lista_proiettili_nemici, screen)    
     if spara_laser and tempo - tempo_laser < 5:
-        sound_laser.play()
+        sound_spada_laser.play(-1)
+        if tempo - tempo_laser > 1:
+            sound_spada_laser.set_volume(1)
         proiettile_rect = pygame.Rect(aereo.rectv.x + aereo.rectv.width/2 - dim_proiettile_x/2, aereo.rectv.y - dim_proiettile_y/2, dim_proiettile_x, dim_proiettile_y)
         p = Proiettile(proiettile_rect, img_laser_pw, [0, -10], True)
         lista_proiettili.append(p)
     elif tempo - tempo_laser <= 6 and spara_laser == True:    
+        sound_spada_laser.stop()
         spara_laser = False
         aereo.laser = False
         muovi_con_aereo = False
@@ -378,7 +385,7 @@ while gameover == False:
                     velx *= -1
                 if randint(0, 1) == 0:
                     vely *= -1
-                w = Powerup(pygame.Rect(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, dim_powerup_x, dim_powerup_y), key.rect, [velx, vely], aereo.proiettili)
+                w = Powerup(pygame.Rect(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, dim_powerup_x, dim_powerup_y), key.rect, [velx, vely], aereo)
                 lista_powerup.append(w)
             e = Esplosione(key.rect.x + key.rect.width/2, key.rect.y + key.rect.height/2, 1.5)
             lista_esplosioni.append(e)
@@ -401,7 +408,7 @@ while gameover == False:
     mouse_pressed = pygame.mouse.get_pressed()
 
     if (mouse_pressed[2] == True and rect_pausa_grande.collidepoint(mouse_pos_2)) or key_pressed[pygame.K_ESCAPE] == True:
-        sound_game.stop()
+        pygame.mixer.music.pause()
         while run1:
             pygame.draw.rect(screen, WHITE, rect_exit, 2)
             screen.blit(surf_text_exit, (rect_exit.x+(rect_exit.width//2)-48, rect_exit.y+(rect_exit.height//2)-30))
@@ -437,9 +444,9 @@ while gameover == False:
                     gameover = True
             
             pygame.display.update()
-    
-    sound_game.play()
-    
+        if not run1:
+            pygame.mixer.music.unpause()
+        
     screen.blit(surf_text_punteggio, (0,0))      
     if conta >= HEIGHT:
         conta = 0
@@ -451,7 +458,7 @@ while gameover == False:
 
     pygame.display.update()
 
-sound_game.stop()
+pygame.mixer.music.stop()   
 
 surf_text_punteggio = font_punteggio_finale.render(f"PUNTEGGIO: {punteggio[0]}", True, WHITE)
 stringa = []
